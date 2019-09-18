@@ -7,10 +7,10 @@ public class Aluno_Oferta_Disciplina {
 	private double nota_2; 
 	private double media_final; 
 	private int frequencia; 
-	private char ativo;
+	private String ativo;
 	
 	public Aluno_Oferta_Disciplina(String cpf, int codigo, double nota_1, double nota_2, double media_final,
-			int frequencia, char ativo) {
+			int frequencia, String ativo) {
 		super();
 		this.cpf = cpf;
 		this.codigo = codigo;
@@ -57,10 +57,10 @@ public class Aluno_Oferta_Disciplina {
 	public void setFrequencia(int frequencia) {
 		this.frequencia = frequencia;
 	}
-	public char getAtivo() {
+	public String getAtivo() {
 		return ativo;
 	}
-	public void setAtivo(char ativo) {
+	public void setAtivo(String ativo) {
 		this.ativo = ativo;
 	} 
 }
