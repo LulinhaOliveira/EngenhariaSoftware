@@ -5,22 +5,22 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Conex„o {
-	public static Conex„o instance;
+public class Conex√£o {
+	public static Conex√£o instance;
 	private Connection connection = null;
 	private Statement statement = null;
 	private ResultSet resultset = null;
 	
-	public static Conex„o getInstance() {
-		if(Conex„o.instance == null) {
-			return Conex„o.instance = new Conex„o();
+	public static Conex√£o getInstance() {
+		if(Conex√£o.instance == null) {
+			return Conex√£o.instance = new Conex√£o();
 		}
-		return Conex„o.instance;
+		return Conex√£o.instance;
 	}
 	public void conectar() {
-		String servidor = "jdbc:mysql://localhost:3306/gerenciarcursos";
-		String usuario = "root";
-		String senha = "lulinha628";
+		String servidor = "jdbc:mysql://remotemysql.com:3306/DYvQEcmfPu";
+		String usuario = "DYvQEcmfPu";
+		String senha = "nWuFooVwBz";
 		String driver = "com.mysql.jdbc.Driver";
 
 		try {
