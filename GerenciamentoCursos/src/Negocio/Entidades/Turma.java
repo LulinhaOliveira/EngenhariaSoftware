@@ -8,7 +8,13 @@ public class Turma {
 	private String semestre; 
 	private char ativo;
 	
-	
+	public Turma( String nome, String sigla, String turno, String semestre) {
+		this.nome = nome;
+		this.sigla = sigla;
+		this.turno = turno;
+		this.semestre = semestre;
+		this.ativo = 's';
+	}
 	public Turma(int codigo, String nome, String sigla, String turno, String semestre, char ativo) {
 		this.codigo = codigo;
 		this.nome = nome;

@@ -2,19 +2,22 @@ package Dados;
 
 import java.util.ArrayList;
 
-import BancoDados.Conexão;
+import BancoDados.Conexao;
 import Negocio.Entidades.Turma;
 
 public class TurmaRepositorio {
 
-	ArrayList <Turma> turmalista = new ArrayList <Turma> ();
+	ArrayList <Turma> turmalista ;
 	Turma turma ;
-
+    
+	public TurmaRepositorio(){
+		turmalista = new ArrayList <Turma> ();
+    }
 	public void InserirTurma(Turma turma) {
 		try {
 			String sql = "INSERT INTO turma(nome,sigla,turno,semestre) "
 					+ "VALUES ('" + turma.getNome() + "','" + turma.getSigla() + "','" + turma.getTurno() + "','" + turma.getSemestre()+"')";
-			Conexão.getInstance().getStatement().executeQuery(sql);
+			Conexao.getInstance().getStatement().executeUpdate(sql);
 		}catch(Exception e) {
 			System.out.println("Error" + e.getMessage());
 		}
@@ -24,13 +27,13 @@ public class TurmaRepositorio {
 		turmalista.clear();
 		try {
 			String sql = "SELECT * FROM turma";
-			Conexão.getInstance().setResultset(Conexão.getInstance().getStatement().executeQuery(sql));
-			Conexão.getInstance().setStatement(Conexão.getInstance().getConnection().createStatement());
+			Conexao.getInstance().setResultset(Conexao.getInstance().getStatement().executeQuery(sql));
+			Conexao.getInstance().setStatement(Conexao.getInstance().getConnection().createStatement());
 
-			while(Conexão.getInstance().getResultset().next()) {
-				turma = new Turma(Integer.parseInt(Conexão.getInstance().getResultset().getString("codigo")),Conexão.getInstance().getResultset().getString("nome"),
-						Conexão.getInstance().getResultset().getString("sigla"), Conexão.getInstance().getResultset().getString("turno"), Conexão.getInstance().getResultset().getString("semestre"),
-						Conexão.getInstance().getResultset().getString("ativo").charAt(0));
+			while(Conexao.getInstance().getResultset().next()) {
+				turma = new Turma(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")),Conexao.getInstance().getResultset().getString("nome"),
+						Conexao.getInstance().getResultset().getString("sigla"), Conexao.getInstance().getResultset().getString("turno"), Conexao.getInstance().getResultset().getString("semestre"),
+						Conexao.getInstance().getResultset().getString("ativo").charAt(0));
 				turmalista.add(turma);
 
 			}

@@ -5,17 +5,17 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class Conexão {
-	public static Conexão instance;
+public class Conexao {
+	public static Conexao instance;
 	private Connection connection = null;
 	private Statement statement = null;
 	private ResultSet resultset = null;
 	
-	public static Conexão getInstance() {
-		if(Conexão.instance == null) {
-			return Conexão.instance = new Conexão();
+	public static Conexao getInstance() {
+		if(Conexao.instance == null) {
+			return Conexao.instance = new Conexao();
 		}
-		return Conexão.instance;
+		return Conexao.instance;
 	}
 	public void conectar() {
 		String servidor = "jdbc:mysql://remotemysql.com:3306/DYvQEcmfPu";
