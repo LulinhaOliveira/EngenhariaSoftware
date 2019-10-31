@@ -1,5 +1,6 @@
 package Dados;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import BancoDados.Conexao;
@@ -7,29 +8,30 @@ import Negocio.Entidades.Turma;
 
 public class TurmaRepositorio {
 
-	ArrayList <Turma> turmalista ;
+	private ArrayList <Turma> turmalista ;
 	Turma turma ;
     
+	
+	public ArrayList<Turma> getTurmalista() {
+		return turmalista;
+	}
+
+	public void setTurmalista(ArrayList<Turma> turmalista) {
+		this.turmalista = turmalista;
+	}
+
+	
 	public TurmaRepositorio(){
 		turmalista = new ArrayList <Turma> ();
     }
-	public void InserirTurma(Turma turma) {
-		try {
-			String sql = "INSERT INTO turma(nome,sigla,turno,semestre) "
-					+ "VALUES ('" + turma.getNome() + "','" + turma.getSigla() + "','" + turma.getTurno() + "','" + turma.getSemestre()+"')";
-			Conexao.getInstance().getStatement().executeUpdate(sql);
-		}catch(Exception e) {
-			System.out.println("Error" + e.getMessage());
-		}
-	}
 	
-	public void Buscar() {
+	//Exemplo Teste
+	public void Buscar1() {
 		turmalista.clear();
+		String sql = "SELECT * FROM turma";
+		Conexao.getInstance().buscarSQL(sql);
+		
 		try {
-			String sql = "SELECT * FROM turma";
-			Conexao.getInstance().setResultset(Conexao.getInstance().getStatement().executeQuery(sql));
-			Conexao.getInstance().setStatement(Conexao.getInstance().getConnection().createStatement());
-
 			while(Conexao.getInstance().getResultset().next()) {
 				turma = new Turma(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")),Conexao.getInstance().getResultset().getString("nome"),
 						Conexao.getInstance().getResultset().getString("sigla"), Conexao.getInstance().getResultset().getString("turno"), Conexao.getInstance().getResultset().getString("semestre"),
@@ -37,11 +39,13 @@ public class TurmaRepositorio {
 				turmalista.add(turma);
 
 			}
-
-		}catch(Exception e) {
-			System.out.println("Error " + e.getMessage());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-
 }
 

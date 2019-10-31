@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import Negocio.Entidades.Turma;
+
 public class Conexao {
 	public static Conexao instance;
 	private Connection connection = null;
@@ -48,7 +50,23 @@ public class Conexao {
 			return false;
 	}
 	
+	public void executaSQL(String sql) {
+		try {
+			Conexao.getInstance().getStatement().executeUpdate(sql);
+		}catch(Exception e) {
+			System.out.println("Error" + e.getMessage());
+		}
+	}
 	
+	public void buscarSQL(String sql) {
+		try {
+			Conexao.getInstance().setResultset(Conexao.getInstance().getStatement().executeQuery(sql));
+			Conexao.getInstance().setStatement(Conexao.getInstance().getConnection().createStatement());
+		
+		}catch(Exception e) {
+			System.out.println("Error " + e.getMessage());
+		}
+	}
 	
 	public Connection getConnection() {
 		return connection;
