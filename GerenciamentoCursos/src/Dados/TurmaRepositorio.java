@@ -37,8 +37,9 @@ public class TurmaRepositorio {
 						Conexao.getInstance().getResultset().getString("sigla"), Conexao.getInstance().getResultset().getString("turno"), Conexao.getInstance().getResultset().getString("semestre"),
 						Conexao.getInstance().getResultset().getString("ativo").charAt(0));
 				turmalista.add(turma);
-
+				Conexao.getInstance().setResultset(null);
 			}
+			
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
