@@ -9,8 +9,6 @@ public class Usuario {
 	private char ativo;
 	private String senha;
 	
-	
-	
 	public Usuario(String cpf, String nome, String email, char sexo, String telefone, String senha, char ativo) {
 		this.cpf = cpf;
 		this.nome = nome;
@@ -20,7 +18,7 @@ public class Usuario {
 		this.senha = senha;
 		this.ativo = ativo;
 	}
-	
+
 	public String getCpf() {
 		return cpf;
 	}

@@ -50,22 +50,26 @@ public class Conexao {
 			return false;
 	}
 	
-	public void executaSQL(String sql) {
+	public int executaSQL(String sql) {
 		try {
 			Conexao.getInstance().getStatement().executeUpdate(sql);
 		}catch(Exception e) {
 			System.out.println("Error" + e.getMessage());
+			return 500; //erro interno do sistema
 		}
+		return 200; //sucess
 	}
 	
-	public void buscarSQL(String sql) {
+	public int buscarSQL(String sql) {
 		try {
 			Conexao.getInstance().setResultset(Conexao.getInstance().getStatement().executeQuery(sql));
 			Conexao.getInstance().setStatement(Conexao.getInstance().getConnection().createStatement());
 		
 		}catch(Exception e) {
 			System.out.println("Error " + e.getMessage());
+			return 500; //return 500 = erro do sistema
 		}
+		return 200; //return 200 = sucesso
 	}
 	
 	public Connection getConnection() {
