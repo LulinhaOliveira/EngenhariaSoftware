@@ -1,21 +1,20 @@
 package Teste;
 
 import BancoDados.Conexao;
-import Dados.TurmaRepositorio;
+import Negocio.CursoControle;
+import Negocio.Entidades.Curso;
 
 public class Main {
 
 	public static void main(String[] args) {
-		TurmaRepositorio t = new TurmaRepositorio();
-
-
-		Conexao.getInstance().conectar();
-		t.Buscar1();
+		Curso c = new Curso("CursoAtualizado","13:00 as 17:00","");
+		CursoControle cc = new CursoControle();
 		
-		System.out.println(t.getTurmalista().get(0).getNome());
-
+		Conexao.getInstance().conectar();
+		
+		cc.inativarCurso("CursoAtualizado");
+		
 		Conexao.getInstance().desconectar();
-
 	}
 }
 
