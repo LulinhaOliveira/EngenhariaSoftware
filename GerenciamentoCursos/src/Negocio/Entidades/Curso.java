@@ -1,19 +1,23 @@
 package Negocio.Entidades;
 
-import java.sql.Time;
-
 public class Curso {
 	private int codigo ;
 	private String nome; 
-	private Time horario_funcionamento; 
-	private char ativo;
+	private String horario_funcionamento; 
+	private char ativo = 's' ;
 	private String cpf_coordenador;
 	
-	public Curso(int codigo, String nome, Time horario_funcionamento, char ativo, String cpf_coordenador) {
+	public Curso(int codigo, String nome, String horario_funcionamento, char ativo, String cpf_coordenador) {
 		this.codigo = codigo;
 		this.nome = nome;
 		this.horario_funcionamento = horario_funcionamento;
 		this.ativo = ativo;
+		this.cpf_coordenador = cpf_coordenador;
+	}
+	
+	public Curso (String nome, String horario_funcionamento, String cpf_coordenador) {
+		this.nome = nome;
+		this.horario_funcionamento = horario_funcionamento;
 		this.cpf_coordenador = cpf_coordenador;
 	}
 	public int getCodigo() {
@@ -28,10 +32,10 @@ public class Curso {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public Time getHorario_funcionamento() {
+	public String getHorario_funcionamento() {
 		return horario_funcionamento;
 	}
-	public void setHorario_funcionamento(Time horario_funcionamento) {
+	public void setHorario_funcionamento(String horario_funcionamento) {
 		this.horario_funcionamento = horario_funcionamento;
 	}
 	public char getAtivo() {

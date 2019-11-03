@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import Negocio.Entidades.Turma;
-
 public class Conexao {
 	public static Conexao instance;
 	private Connection connection = null;
