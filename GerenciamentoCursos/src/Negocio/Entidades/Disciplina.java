@@ -20,6 +20,9 @@ public class Disciplina {
 		this.codigo_curso = codigo_curso;
 		this.codigo_turma = codigo_turma;
 	}
+	public Disciplina(String nome) {
+		this.nome = nome;
+	}
 	public int getCodigo() {
 		return codigo;
 	}
