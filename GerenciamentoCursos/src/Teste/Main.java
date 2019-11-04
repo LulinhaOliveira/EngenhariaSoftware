@@ -10,7 +10,7 @@ public class Main {
 
 	public static void main(String[] args) {
 
-
+		/*testes curso
 		//inserir
 		ArrayList<Object> myList = new ArrayList<Object>();
 
@@ -48,7 +48,12 @@ public class Main {
 		Conexao.getInstance().conectar();
 		user.encontrarTodosUsuarios();
 		Conexao.getInstance().desconectar();
+		*/
 		
+		/*testes disciplina
+		 
+		 
+		 */
 		
 	}
 }
