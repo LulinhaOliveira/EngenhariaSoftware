@@ -50,9 +50,6 @@ public class UsuarioRepositorio {
 				listaUsuario.add(usuario);
 			}
 			Conexao.getInstance().setResultset(null);
-			for (Usuario user: listaUsuario) {
-				System.out.println(user.getNome());
-			}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -75,9 +72,10 @@ public class UsuarioRepositorio {
 							Conexao.getInstance().getResultset().getString("senha"),
 							Conexao.getInstance().getResultset().getString("ativo").charAt(0));
 					listaUsuario.add(usuario);
-					System.out.println(this.usuario.getNome());
 					Conexao.getInstance().setResultset(null);
 				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
