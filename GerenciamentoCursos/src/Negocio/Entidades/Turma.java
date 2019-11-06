@@ -59,4 +59,8 @@ public class Turma {
 	public void setAtivo(char ativo) {
 		this.ativo = ativo;
 	}
+	
+	public String toString() {
+		return "Nome: " + this.nome + "\nSigla: " + this.sigla + "\nAtivo: " + this.ativo + "\nTurno: " + this.turno + "\nSemestre: " + this.semestre;
+	}
 }

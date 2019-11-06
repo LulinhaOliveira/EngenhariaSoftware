@@ -22,7 +22,7 @@ public class CursoRepositorio {
 		this.cursosLista = cursosLista;
 	}
 
-	
+
 	//INSERIR CURSO
 	public void inserirCurso(String sql) {
 		Conexao.getInstance().executaSQL(sql);
@@ -32,13 +32,13 @@ public class CursoRepositorio {
 		Conexao.getInstance().executaSQL(sql);
 	}
 	//ATUALIZAR DADOS DO CURSO
-	public void atualizarCurso(ArrayList <String> array) {
-		for(String a : array) {
-			Conexao.getInstance().executaSQL(a);
-		}
+	public void atualizarCurso(String sql) {
+		Conexao.getInstance().executaSQL(sql);
 	}
+	
 	//BUSCAR CURSOS
 	public void buscarCurso(String sql) {
+		cursosLista.clear();
 		Conexao.getInstance().buscarSQL(sql);
 		try {
 			while(Conexao.getInstance().getResultset().next()) {

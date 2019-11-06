@@ -5,7 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Exception.CampoVazioException;
+import Negocio.Entidades.Curso;
+import Negocio.Entidades.Turma;
+import Negocio.Fachada.Fachada;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -26,27 +34,22 @@ public class Cadastro extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private JPasswordField textField_5;
-
-
-	public static Cadastro instance;
 	private JLabel lblCadastro_1;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblCurso;
 	private JTextField textField_6;
 	private JComboBox<String> comboBox;
 	private JComboBox<String> comboBox_1;
-	public static Cadastro getInstace() throws Throwable {
+	public static Cadastro instance;
+	public static Cadastro getInstace()  {
 		if (Cadastro.instance == null) {
 			return Cadastro.instance = new Cadastro();
 		}
 		return Cadastro.instance;
 	}
-	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
+
+	static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -62,11 +65,8 @@ public class Cadastro extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 * @throws Throwable 
-	 */
-	public Cadastro() throws Throwable {
+
+	public Cadastro() {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(12, 125, 450, 300);
@@ -117,6 +117,16 @@ public class Cadastro extends JFrame {
 
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Curso curso =  new Curso((String)textField.getText(),(String)textField_1.getText(),(String)textField_2.getText());
+
+
+					try {
+						Fachada.getInstace().getCcurso().inserirCurso(curso);
+					} catch (CampoVazioException e1) {
+						JOptionPane.showMessageDialog(null, e1.toString("Nome Não Pode Ser "));
+
+					}
+
 				}
 			});
 
@@ -219,6 +229,13 @@ public class Cadastro extends JFrame {
 
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Turma turma = new Turma((String)textField.getText(),(String)textField_1.getText(),(String)textField_2.getText(), (String) textField_3.getText());;
+
+					try {
+						Fachada.getInstace().getTc().inserirTurma(turma);
+					} catch (CampoVazioException e1) {
+						JOptionPane.showMessageDialog(null, e1.toString("Nenhum Campo Pode Ser "));
+					}
 				}
 			});
 

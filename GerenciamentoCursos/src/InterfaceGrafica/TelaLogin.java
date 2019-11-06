@@ -5,6 +5,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import BancoDados.Conexao;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -76,6 +79,8 @@ public class TelaLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaLogin() {
+		Conexao.getInstance().conectar();
+		
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 480, 318);

@@ -1,42 +1,62 @@
 package Negocio;
 
-import java.util.ArrayList;
-
 import Dados.CursoRepositorio;
+import Exception.CampoVazioException;
 import Negocio.Entidades.Curso;
 
 public class CursoControle {
-	CursoRepositorio cp;
-	
+	private CursoRepositorio cp;
+
 	public CursoControle() {
 		cp = new CursoRepositorio();
 	}
-	
+
+
+	public CursoRepositorio getCp() {
+		return cp;
+	}
+
+
+
+	public void setCp(CursoRepositorio cp) {
+		this.cp = cp;
+	}
+
+
+	//BUSCAR O CODIGO PELO NOME DO CURSO
 	public int buscarCodigo(String curso) {
 		Curso c = new Curso (curso,"","");
 		buscarCurso(c);
-		
+
 		return cp.getCursosLista().get(0).getCodigo();
 	}
-	
-	public void inserirCurso(Curso curso) {
+	//CONTROLA A STRING DE INSERT PARA CHAMAR O REPOSITORIO
+	public void inserirCurso(Curso curso) throws CampoVazioException {
 		String sql = "INSERT INTO curso(nome";
 		String auxSQL = "VALUES (";
 
-		auxSQL += "'" + curso.getNome() + "'";
-		if(curso.getHorario_funcionamento() != null && curso.getHorario_funcionamento() != "") {
-			sql += ",hora_funcionamento";
-			auxSQL +=  ",'" + curso.getHorario_funcionamento() + "'" ;
-		}
-		if(curso.getCpf_coordenador() != null && curso.getCpf_coordenador() != "") {
-			sql += ",cpf_coordenador";
-			auxSQL += ",'" + curso.getCpf_coordenador() + "'";
-		}
-		sql += ")" + auxSQL + ")";
+		if(curso.getNome() != null && !(curso.getNome().trim().equals(""))) {
+			auxSQL += "'" + curso.getNome() + "'";
+			if(curso.getHorario_funcionamento() != null && !(curso.getHorario_funcionamento().trim().equals(""))) {
+				sql += ",hora_funcionamento";
+				auxSQL +=  ",'" + curso.getHorario_funcionamento() + "'" ;
+			}
+			if(curso.getCpf_coordenador() != null && !(curso.getCpf_coordenador().trim().equals(""))) {
+				sql += ",cpf_coordenador";
+				auxSQL += ",'" + curso.getCpf_coordenador() + "'";
+			}
+			sql += ")" + auxSQL + ")";
+			
+			cp.inserirCurso(sql);
 		
-		cp.inserirCurso(sql);
+		}else {
+			throw new CampoVazioException();
+		}
+
+
+		
 	}
-	
+	//CONTROLA A STRING DE SELECT PARA CHAMAR O REPOSITORIO
 	public void buscarCurso(Curso curso) {
 		String sql = "SELECT * FROM curso";
 		String auxSQL = " WHERE ";
@@ -49,7 +69,7 @@ public class CursoControle {
 				aux = 1;
 			}
 		}
-		if(curso.getNome() != null && curso.getNome() != "") {
+		if(curso.getNome() != null && !(curso.getNome().trim().equals(""))) {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "nome = '" + curso.getNome() + "'";
@@ -58,7 +78,7 @@ public class CursoControle {
 				sql += " AND " + " nome = '" + curso.getNome() + "'";
 			}
 		}
-		if(curso.getCpf_coordenador() != null && curso.getCpf_coordenador() != "") {
+		if(curso.getCpf_coordenador() != null && !(curso.getCpf_coordenador().trim().equals(""))) {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "cpf_coordeandor = '" + curso.getCpf_coordenador() + "'";
@@ -67,7 +87,7 @@ public class CursoControle {
 				sql += " AND " + "cpf_coordeandor = '" + curso.getCpf_coordenador() + "'";
 			}
 		}
-		if(curso.getHorario_funcionamento() != null && curso.getHorario_funcionamento() != "") {
+		if(curso.getHorario_funcionamento() != null && !(curso.getHorario_funcionamento().trim().equals(""))) {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "hora_funcionamento = '" + curso.getHorario_funcionamento() + "'";
@@ -84,37 +104,40 @@ public class CursoControle {
 				sql += " AND " + "ativo = '" + curso.getAtivo() + "'";
 			}
 		}
-		
+
 		cp.buscarCurso(sql);
 	}
-
+	//CONTROLA A STRING DE UPTADE PARA CHAMAR O REPOSITORIO
 	public void inativarCurso(String curso) {
 		int codigo =  buscarCodigo(curso);
-		
+
 		String sql = "UPDATE curso SET ativo = 'N' WHERE codigo = " + codigo;
-		
+
 		cp.inativarCurso(sql);
 	}
-	
+	//CONTROLA A STRING DE UPTADE PARA CHAMAR O REPOSITORIO
 	public void atualizarCurso(Curso novoCurso, String nomeCurso) {
-		ArrayList <String> aux = new ArrayList <String> ();
+		int aux = 0;
+		String sql = "";
 		int codigo = buscarCodigo(nomeCurso);
-		
-		if (novoCurso.getNome() != null && novoCurso.getNome() != "") {
-			String sql = "UPDATE curso SET nome = '" + novoCurso.getNome()  +"' WHERE codigo = " + codigo; 
-			aux.add(sql);
+
+		if (novoCurso.getNome() != null && !(novoCurso.getNome().trim().equals(""))) {
+			sql += "UPDATE curso SET nome = '" + novoCurso.getNome()  +"' WHERE codigo = " + codigo + ";"; 
+			aux = 1;
 		}
-		if(novoCurso.getHorario_funcionamento() != null && novoCurso.getHorario_funcionamento() != "") {
-			String sql = "UPDATE curso SET hora_funcionamento = '" + novoCurso.getHorario_funcionamento() +"' WHERE codigo = " + codigo; 
-			aux.add(sql);
+		if(novoCurso.getHorario_funcionamento() != null && !(novoCurso.getHorario_funcionamento().trim().equals(""))) {
+			sql += "UPDATE curso SET hora_funcionamento = '" + novoCurso.getHorario_funcionamento() +"' WHERE codigo = " + codigo + ";"; 
+			aux = 1;
 
 		}
-		if(novoCurso.getCpf_coordenador() != null && novoCurso.getCpf_coordenador() != "") {
-			String sql = "UPDATE curso SET cpf_coordenador = '" + novoCurso.getCpf_coordenador() + "' WHERE codigo = " + codigo;
-			aux.add(sql);
+		if(novoCurso.getCpf_coordenador() != null && !(novoCurso.getCpf_coordenador().trim().equals(""))) {
+			sql += "UPDATE curso SET cpf_coordenador = '" + novoCurso.getCpf_coordenador() + "' WHERE codigo = " + codigo + ";";
+			aux = 1;
 		}
-		cp.atualizarCurso(aux);
-	
+		
+		if(aux == 1)
+		cp.atualizarCurso(sql);
+
 	}
 }
 
