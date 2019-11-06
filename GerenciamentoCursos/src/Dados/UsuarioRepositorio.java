@@ -14,18 +14,25 @@ public class UsuarioRepositorio {
 	private ArrayList <Usuario> listaUsuario;
 	Usuario usuario;
 
+	public UsuarioRepositorio() {
+		listaUsuario = new ArrayList <Usuario>();
+	}
 
 	public ArrayList<Usuario> getListaUsuario() {
-		return listaUsuario;
+		if (this.listaUsuario != null) {
+			return listaUsuario;
+		} else {
+			JOptionPane.showMessageDialog(null, "Nenhum dado encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
+		return null;
 	}
 
 	public void setListaUsuario(ArrayList<Usuario> listaUsuario) {
-		this.listaUsuario = listaUsuario;
-	}
-
-
-	public UsuarioRepositorio(){
-		listaUsuario = new ArrayList <Usuario> ();
+		if (listaUsuario != null) {
+			this.listaUsuario = listaUsuario;
+		} else {
+			JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 
 	public void encontrarTodosUsuarios() {
@@ -81,32 +88,11 @@ public class UsuarioRepositorio {
 		}
 	}
 
-	public void inserirUsuario(ArrayList<Object> data) {
+	public void inserirUsuario(String sql) {
 		try {
-			//recebe o ultimo campo do arrayList
-			Object o = data.get(data.size() - 1);
-
-			String sql = "INSERT INTO usuario(cpf, nome, sexo, telefone, email, senha) VALUES (";
-			for (Object obj: data) {
-				if (obj == null) {
-					JOptionPane.showMessageDialog(null, "Parâmetros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
-				} else if(o != obj) {
-					if (obj instanceof Character) {
-						//tipo char concatena com aspas simples
-						sql += "\'" + obj + "\', "; 
-					} else {
-						sql += "\"" + obj + "\", "; 
-					}
-				} else if (o == obj) {
-					//caso entre aqui, será o ultimo dado do arraylist, então não precisa concatenar a ','
-					sql += "\"" + obj +"\"";	
-				}
-			}
-			sql += ");";
-
 			int rowInsered = Conexao.getInstance().executaSQL(sql);
 			if (rowInsered == 200) {
-				JOptionPane.showMessageDialog(null, "Usuário inserido com sucesso");
+				JOptionPane.showMessageDialog(null, "Usuario inserido com sucesso");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -114,59 +100,27 @@ public class UsuarioRepositorio {
 		}
 	}
 
-	public void atualizarUsuario(String cpf, String nome, String telefone, String email, String senha) {
+	public void atualizarUsuario(String sql) {
 		try {
-			if (cpf != null &&  cpf.isEmpty()) {
-				String sql = "UPDATE usuario SET";
-				int aux = 0;
-				if (nome != null && !nome.isEmpty()) {
-					sql += " nome = '" + nome + "'";
-					aux = 1;
-				}
-
-				if (telefone != null && !telefone.isEmpty()) {
-					if (aux == 1) {
-						sql += ", telefone = '" + telefone + "'";
-					} else {
-						aux = 1;
-						sql += " telefone = '" + telefone + "'";
-					}
-				}
-
-				if (email != null && !email.isEmpty()) {
-					if (aux == 1) {
-						sql += ", email = '" + email + "'";
-					} else {
-						sql += " email = '" + email + "'";
-					}
-				}
-
-				sql += " WHERE cpf = '" + cpf + "'";
-
-				int rowInsered = Conexao.getInstance().executaSQL(sql);
-				if (rowInsered == 200) {
-					JOptionPane.showMessageDialog(null, "Usuário atualizado com sucesso");
-				} else {
-					JOptionPane.showMessageDialog(null, "Parâmetros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
-				}
+			int rowInsered = Conexao.getInstance().executaSQL(sql);
+			if (rowInsered == 200) {
+				JOptionPane.showMessageDialog(null, "Usuario atualizado com sucesso");
+			} else {
+				JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void desativarUsuario(String cpf) {
+	public void desativarUsuario(String sql) {
 		try {
-			if (cpf != null && !cpf.isEmpty()) {
-				String sql = "UPDATE usuario SET ativo = 'N' WHERE cpf = '" + cpf + "'";
+			int rowInsered = Conexao.getInstance().executaSQL(sql);
 				
-				int rowInsered = Conexao.getInstance().executaSQL(sql);
-				
-				if (rowInsered == 200) {
-					JOptionPane.showMessageDialog(null, "Usuário desativado com sucesso");
-				} else {
-					JOptionPane.showMessageDialog(null, "Parâmetros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
-				}
+			if (rowInsered == 200) {
+				JOptionPane.showMessageDialog(null, "Usuario desativado com sucesso");
+			} else {
+				JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
 			}
 		}catch (Exception e) {
 			
