@@ -1,7 +1,6 @@
 package Dados;
 
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;

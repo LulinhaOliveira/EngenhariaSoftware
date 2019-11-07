@@ -3,7 +3,7 @@ package Negocio;
 import javax.swing.JOptionPane;
 
 import Dados.ProfessorRepositorio;
-import Dados.UsuarioRepositorio;
+import Negocio.Entidades.Professor;
 
 public class ProfessorControle {
 	private ProfessorRepositorio pr;
@@ -41,4 +41,22 @@ public class ProfessorControle {
     		e.printStackTrace();
     	}
     }
+    
+	public void buscarProfessores(Professor p) {
+		String sql = "SELECT * FROM professor";
+		String auxSQL = " WHERE ";
+	
+
+
+		if( p.getCpf() != null && !(p.getCpf().trim().equals(""))) {
+				sql += auxSQL;
+				sql += "cpf = '" + p.getCpf() + "'";	
+
+		}
+
+	
+		pr.buscarProfessor(sql);
+	
+	}
+    
 }

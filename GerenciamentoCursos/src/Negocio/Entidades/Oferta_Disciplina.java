@@ -1,14 +1,15 @@
 package Negocio.Entidades;
 
-import java.sql.Time;
-
 public class Oferta_Disciplina {
 	private int codigo; 
 	private String dia_1; 
 	private String dia_2; 
-	private Time hora_1; 
+	private long hora_1; 
+	private long hora_2; 
+	private char ativo;  
+	private String cpf;
 	
-	public Oferta_Disciplina(int codigo, String dia_1, String dia_2, Time hora_1, Time hora_2, char ativo, String cpf) {
+	public Oferta_Disciplina(int codigo, String dia_1, String dia_2, long hora_1, long hora_2, char ativo, String cpf) {
 		this.codigo = codigo;
 		this.dia_1 = dia_1;
 		this.dia_2 = dia_2;
@@ -35,16 +36,16 @@ public class Oferta_Disciplina {
 	public void setDia_2(String dia_2) {
 		this.dia_2 = dia_2;
 	}
-	public Time getHora_1() {
+	public long getHora_1() {
 		return hora_1;
 	}
-	public void setHora_1(Time hora_1) {
+	public void setHora_1(long hora_1) {
 		this.hora_1 = hora_1;
 	}
-	public Time getHora_2() {
+	public long getHora_2() {
 		return hora_2;
 	}
-	public void setHora_2(Time hora_2) {
+	public void setHora_2(long hora_2) {
 		this.hora_2 = hora_2;
 	}
 	public char getAtivo() {
@@ -59,7 +60,5 @@ public class Oferta_Disciplina {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	private Time hora_2; 
-	private char ativo;  
-	private String cpf;
+
 }
