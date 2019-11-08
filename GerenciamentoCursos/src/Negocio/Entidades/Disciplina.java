@@ -23,6 +23,10 @@ public class Disciplina {
 	public Disciplina(String nome) {
 		this.nome = nome;
 	}
+	public Disciplina(String nome , int codigo_curso){
+		this.nome = nome;
+		this.codigo_curso = codigo_curso;
+	}
 	public int getCodigo() {
 		return codigo;
 	}
@@ -65,4 +69,12 @@ public class Disciplina {
 	public void setCodigo_turma(int codigo_turma) {
 		this.codigo_turma = codigo_turma;
 	}
+	@Override
+	public String toString() {
+		return "Nome: " + nome + "\nEmenta: " + ementa + "\nNumero_creditos: "
+				+ numero_creditos + "\nAtivo: " + ativo + "\nCodigo_curso: " + codigo_curso + "\nCodigo_turma: "
+				+ codigo_turma ;
+	}
+	
+	
 }

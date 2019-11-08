@@ -1,7 +1,6 @@
 package Dados;
 
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 
 import BancoDados.Conexao;
@@ -32,14 +31,13 @@ public class Oferta_DisciplinaRepositorio {
 		Conexao.getInstance().executaSQL(sql);
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void disciplinasOfertadas(String sql) {
 		oferta_disciplinalista.clear();
 		Conexao.getInstance().buscarSQL(sql);
 		try {
 			while(Conexao.getInstance().getResultset().next()) {
 				oferta = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
-						,Conexao.getInstance().getResultset().getString("dia_2"),Time.parse(Conexao.getInstance().getResultset().getString("hora_1")),Time.parse(Conexao.getInstance().getResultset().getString("hora_2")),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
 						Conexao.getInstance().getResultset().getString("cpf"));
 				oferta_disciplinalista.add(oferta);
 			}

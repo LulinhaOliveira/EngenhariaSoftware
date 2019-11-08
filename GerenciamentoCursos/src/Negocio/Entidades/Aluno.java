@@ -2,7 +2,7 @@ package Negocio.Entidades;
 
 public class Aluno {
 	private String cpf; 
-	private long data_início; 
+	private String data_início; 
 	private int codigo_curso;
 	private String numero_matricula; 
     private char ativo;
@@ -10,9 +10,9 @@ public class Aluno {
     public String getCpf() {
 		return cpf;
 	}
-	public Aluno(String cpf, long l, int codigo_curso, String numero_matricula, char ativo) {
+	public Aluno(String cpf, String data_inicio, int codigo_curso, String numero_matricula, char ativo) {
 		this.cpf = cpf;
-		this.data_início = l;
+		this.data_início = data_inicio;
 		this.codigo_curso = codigo_curso;
 		this.numero_matricula = numero_matricula;
 		this.ativo = ativo;
@@ -20,10 +20,10 @@ public class Aluno {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	public long getData_início() {
+	public String getData_início() {
 		return data_início;
 	}
-	public void setData_início(long data_início) {
+	public void setData_início(String data_início) {
 		this.data_início = data_início;
 	}
 	public int getCodigo_curso() {

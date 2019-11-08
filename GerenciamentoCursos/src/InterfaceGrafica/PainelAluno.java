@@ -6,6 +6,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Negocio.Entidades.Aluno_Oferta_Disciplina;
+import Negocio.Entidades.Disciplina;
+import Negocio.Fachada.Fachada;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -17,15 +21,14 @@ import java.awt.event.ActionEvent;
 public class PainelAluno extends JFrame {
 
 	private JPanel contentPane;
-	@SuppressWarnings("rawtypes")
-	private JComboBox cmbDisciplinas;
+	private JComboBox<String> cmbDisciplinas = new JComboBox<String>();;
     
 	@SuppressWarnings("rawtypes")
 	public JComboBox getCmbDisciplinas() {
 		return cmbDisciplinas;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setCmbDisciplinas(JComboBox cmbDisciplinas) {
 		this.cmbDisciplinas = cmbDisciplinas;
 	}
@@ -53,11 +56,18 @@ public class PainelAluno extends JFrame {
 			}
 		});
 	}
-
+	
+	public void preencheCMB() {
+		cmbDisciplinas.removeAllItems();
+		Fachada.getInstace().disciplinasAlunos(TelaLogin.getCpf(),"Cursando");
+		for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+			cmbDisciplinas.addItem(d.getNome());
+		}
+		
+	}
 	/**
 	 * Create the frame.
 	 */
-	@SuppressWarnings("rawtypes")
 	public PainelAluno() {
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		setBounds(100, 100, 480, 318);
@@ -66,10 +76,14 @@ public class PainelAluno extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario(TelaLogin.getCpf());
+		preencheCMB();
+		
 		JButton btnHistrico = new JButton("Hist\u00F3rico");
 		btnHistrico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PainelAlunoHistorico.getInstace().setVisible(true);
+				PainelAlunoHistorico.getInstace().dispose();
+				new PainelAlunoHistorico().setVisible(true);
 				
 			}
 		});
@@ -79,15 +93,13 @@ public class PainelAluno extends JFrame {
 		JButton btnAlterarDados = new JButton("Alterar Dados");
 		btnAlterarDados.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PainelAlunoAlterarDados.getInstace().setVisible(true);
+				PainelAlunoAlterarDados.getInstace().dispose();
+				new PainelAlunoAlterarDados().setVisible(true);
+				
 			}
 		});
 		btnAlterarDados.setBounds(320, 112, 124, 23);
 		contentPane.add(btnAlterarDados);
-		
-		JLabel lblProfessor = new JLabel("Professor:");
-		lblProfessor.setBounds(23, 216, 325, 14);
-		contentPane.add(lblProfessor);
 		
 		JLabel lblNota1 = new JLabel("Nota 1:");
 		lblNota1.setBounds(23, 241, 90, 14);
@@ -105,32 +117,27 @@ public class PainelAluno extends JFrame {
 		lblFrequncia.setBounds(328, 241, 116, 14);
 		contentPane.add(lblFrequncia);
 		
-		cmbDisciplinas = new JComboBox();
-		cmbDisciplinas.setBounds(267, 178, 177, 22);
+		cmbDisciplinas.setBounds(227, 178, 217, 22);
 		contentPane.add(cmbDisciplinas);
 		
-		JLabel lblCpf = new JLabel("C.P.F :");
+		JLabel lblCpf = new JLabel("C.P.F :" + TelaLogin.getCpf());
 		lblCpf.setBounds(23, 64, 271, 14);
 		contentPane.add(lblCpf);
 		
-		JLabel lblNome = new JLabel("Nome :");
-		lblNome.setBounds(23, 82, 271, 14);
+		JLabel lblNome = new JLabel("Nome : " + (String) Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).getNome());
+		lblNome.setBounds(23, 87, 271, 14);
 		contentPane.add(lblNome);
 		
-		JLabel lblIdade = new JLabel("Idade :");
-		lblIdade.setBounds(23, 96, 66, 14);
+		JLabel lblIdade = new JLabel("Email : "  + (String)Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).getEmail());
+		lblIdade.setBounds(23, 108, 256, 14);
 		contentPane.add(lblIdade);
 		
-		JLabel lblTelefone = new JLabel("Telefone :");
-		lblTelefone.setBounds(171, 96, 139, 14);
+		JLabel lblTelefone = new JLabel("Telefone : " + (String)Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).getTelefone());
+		lblTelefone.setBounds(23, 150, 139, 14);
 		contentPane.add(lblTelefone);
 		
-		JLabel lblEmail = new JLabel("Email :");
-		lblEmail.setBounds(23, 112, 287, 14);
-		contentPane.add(lblEmail);
-		
-		JLabel lblSexo = new JLabel("Sexo : ");
-		lblSexo.setBounds(103, 96, 66, 14);
+		JLabel lblSexo = new JLabel("Sexo : " + Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).getSexo());
+		lblSexo.setBounds(23, 125, 66, 14);
 		contentPane.add(lblSexo);
 		
 		JLabel lblPainelDoAluno = new JLabel("Painel Do Aluno");
@@ -143,13 +150,26 @@ public class PainelAluno extends JFrame {
 		contentPane.add(label);
 		
 		JButton btnVer = new JButton("Ver");
+		btnVer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				@SuppressWarnings("unused")
+				Aluno_Oferta_Disciplina a;
+				int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) cmbDisciplinas.getSelectedItem());
+				
+				lblNota1.setText("Nota 1: " + Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getNota_1());
+				lblNota.setText("Nota 2: " + Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getNota_2());
+				lblMdia.setText("Media : " + Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getMedia_final());
+				lblFrequncia.setText("Falta : " + Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getFrequencia());
+			}
+		});
 		btnVer.setBounds(353, 212, 91, 23);
 		contentPane.add(btnVer);
 		
 		JButton btnNewButton = new JButton("Matr\u00EDcula");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PainelAlunoMatrícula.getInstace().setVisible(true);
+				PainelAlunoMatrícula.getInstace().dispose();
+				new PainelAlunoMatrícula().setVisible(true);
 			}
 		});
 		btnNewButton.setBounds(320, 146, 124, 23);
@@ -158,15 +178,19 @@ public class PainelAluno extends JFrame {
 		JButton button = new JButton("<-");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+			
 				TelaLogin.setCpf(null);
 				TelaLogin.setCurso_aluno_coord(-1);
 				TelaLogin.getInstace().setVisible(true);
+				dispose();
 			}
 		});
 		button.setBounds(18, 11, 47, 23);
 		contentPane.add(button);
 
+		
+		
+		
 		
 	}
 }

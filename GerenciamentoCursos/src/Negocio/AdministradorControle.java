@@ -47,4 +47,16 @@ public class AdministradorControle {
 		}
 		ar.buscarAdministrador(sql);
 	}
+	
+	public boolean isAdministrador(String cpf) {
+		Administrador a = new Administrador(cpf);
+		
+		buscarAdministradores(a);
+		
+		if(ar.getAdministradorlista().size() > 0 ) {
+			return true;
+		}
+		
+		return false;
+	}
 }

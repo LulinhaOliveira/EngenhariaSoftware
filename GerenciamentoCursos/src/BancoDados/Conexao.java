@@ -3,14 +3,19 @@ package BancoDados;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+
+import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 public class Conexao {
 	public static Conexao instance;
 	private Connection connection = null;
 	private Statement statement = null;
 	private ResultSet resultset = null;
-	
+
 	public static Conexao getInstance() {
 		if(Conexao.instance == null) {
 			return Conexao.instance = new Conexao();
@@ -32,7 +37,7 @@ public class Conexao {
 		}
 
 	}
-	
+
 	public void desconectar() {
 		try {
 			this.connection.close();
@@ -40,14 +45,14 @@ public class Conexao {
 			System.out.println("Error" + e.getMessage());
 		}
 	}
-	
+
 	public boolean conectado() {
 		if(this.connection != null)
 			return true;
 		else
 			return false;
 	}
-	
+
 	public int executaSQL(String sql) {
 		try {
 			Conexao.getInstance().getStatement().executeUpdate(sql);
@@ -57,19 +62,20 @@ public class Conexao {
 		}
 		return 200; //sucess
 	}
-	
+
 	public int buscarSQL(String sql) {
 		try {
 			Conexao.getInstance().setResultset(Conexao.getInstance().getStatement().executeQuery(sql));
 			Conexao.getInstance().setStatement(Conexao.getInstance().getConnection().createStatement());
-		
+
 		}catch(Exception e) {
-			System.out.println("Error " + e.getMessage());
+
+			JOptionPane.showMessageDialog(null,e.getMessage());	
 			return 500; //return 500 = erro do sistema
 		}
 		return 200; //return 200 = sucesso
 	}
-	
+
 	public Connection getConnection() {
 		return connection;
 	}

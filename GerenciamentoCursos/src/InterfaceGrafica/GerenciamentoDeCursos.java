@@ -126,12 +126,13 @@ public class GerenciamentoDeCursos extends JFrame {
 		JButton button = new JButton("<-");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				
 				if(TelaLogin.getInstace().getAdmCor() == 0) {
 					PainelCoordenador.getInstace().setVisible(true);	
 				}else if (TelaLogin.getInstace().getAdmCor() == 1) {
 					PainelAdministrador.getInstace().setVisible(true);	
 				}
+				dispose();
 			}
 		});
 		button.setBounds(10, 11, 47, 23);

@@ -38,7 +38,7 @@ public class UsuarioRepositorio {
 		listaUsuario.clear();
 		String sql = "SELECT * FROM usuario WHERE ativo = 'S'";
 		Conexao.getInstance().buscarSQL(sql);
-
+		
 		try {
 			while (Conexao.getInstance().getResultset().next()) {
 				usuario = new Usuario(Conexao.getInstance().getResultset().getString("cpf"), Conexao.getInstance().getResultset().getString("nome"),
@@ -60,9 +60,9 @@ public class UsuarioRepositorio {
 
 	public void encontrarUsuario(String cpf) {
 		try {
-			if (cpf != null && !cpf.isEmpty()) {
+			if (cpf != null && !cpf.trim().equals("")) {
 				listaUsuario.clear();
-				String sql = "SELECT * FROM usuario WHERE cpf = "+cpf;
+				String sql = "SELECT * FROM usuario WHERE cpf = '" + cpf + "'";
 				Conexao.getInstance().buscarSQL(sql);
 				while (Conexao.getInstance().getResultset().next()) {
 					usuario = new Usuario(Conexao.getInstance().getResultset().getString("cpf"), Conexao.getInstance().getResultset().getString("nome"),
@@ -71,7 +71,6 @@ public class UsuarioRepositorio {
 							Conexao.getInstance().getResultset().getString("senha"),
 							Conexao.getInstance().getResultset().getString("ativo").charAt(0));
 					listaUsuario.add(usuario);
-					Conexao.getInstance().setResultset(null);
 				}
 			} else {
 				JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -83,6 +82,8 @@ public class UsuarioRepositorio {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Conexao.getInstance().setResultset(null);
 	}
 
 	public void inserirUsuario(String sql) {

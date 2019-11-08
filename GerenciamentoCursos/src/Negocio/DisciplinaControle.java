@@ -5,17 +5,31 @@ import Dados.DisciplinaRepositorio;
 import Negocio.Entidades.Disciplina;
 
 public class DisciplinaControle {
-	DisciplinaRepositorio dr;
+	private DisciplinaRepositorio dr;
 	
 	public DisciplinaControle() {
 		dr = new DisciplinaRepositorio();
 	}
 	
+	
+	
+	public DisciplinaRepositorio getDr() {
+		return dr;
+	}
+
+
+
+	public void setDr(DisciplinaRepositorio dr) {
+		this.dr = dr;
+	}
+
+
+
 	public int buscarCodigo(String disciplina) {
 		
 		Disciplina d = new Disciplina(disciplina);
 		buscarDisciplina(d);
-		
+
 		return dr.getDisciplinaLista().get(0).getCodigo();
 	}
 
@@ -52,16 +66,17 @@ public class DisciplinaControle {
 		if(disciplina.getNumero_creditos() != 0) {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "numero_creditos = '" + disciplina.getNumero_creditos() + "'";
+				sql += "num_creditos = '" + disciplina.getNumero_creditos() + "'";
 				aux = 1;
 			}else {
-				sql += " AND " + "numero_creditos = '" + disciplina.getNumero_creditos() + "'";
+				sql += " AND " + "num_creditos = '" + disciplina.getNumero_creditos() + "'";
 			}
 		}
 		if(disciplina.getAtivo() == 'N' || disciplina.getAtivo() == 'S') {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "ativo = '" + disciplina.getAtivo() + "'";
+				aux = 1;
 			}else {
 				sql += " AND " + "ativo = '" + disciplina.getAtivo() + "'";
 			}
@@ -71,6 +86,8 @@ public class DisciplinaControle {
 				sql += auxSQL;
 				sql += "codigo_curso = " + disciplina.getCodigo_curso();
 				aux = 1;
+			}else {
+				sql += "AND " + "codigo_curso = " + disciplina.getCodigo_curso();
 			}
 		}
 		if(disciplina.getCodigo_turma() != 0) {
@@ -78,8 +95,11 @@ public class DisciplinaControle {
 				sql += auxSQL;
 				sql += "codigo_turma = " + disciplina.getCodigo_turma();
 				aux = 1;
+			}else {
+				sql += "AND " + "codigo_turma = " + disciplina.getCodigo_turma();
 			}
 		}
+		
 		dr.buscarDisciplina(sql);
 	}
 	
@@ -102,7 +122,7 @@ public class DisciplinaControle {
 			auxSQL += ",'" +disciplina.getEmenta() +"'";
 		}
 		if(disciplina.getNumero_creditos() != 0) {
-			sql += ",numero_creditos";
+			sql += ",num_creditos";
 			auxSQL += ",'"+disciplina.getNumero_creditos() +"'";
 		}
 		if(disciplina.getCodigo_turma() !=0) {

@@ -1,5 +1,9 @@
 package Negocio.Fachada;
 
+
+import java.sql.SQLException;
+import BancoDados.Conexao;
+import Exception.CampoVazioException;
 import Negocio.AdministradorControle;
 import Negocio.AlunoControle;
 import Negocio.Aluno_Oferta_DisciplinaControle;
@@ -11,6 +15,10 @@ import Negocio.Oferta_DisciplinaControle;
 import Negocio.ProfessorControle;
 import Negocio.TurmaControle;
 import Negocio.UsuarioControle;
+import Negocio.Entidades.Aluno_Oferta_Disciplina;
+import Negocio.Entidades.Disciplina;
+import Negocio.Entidades.Oferta_Disciplina;
+import Negocio.Entidades.Usuario;
 
 public class Fachada {
 
@@ -161,9 +169,266 @@ public class Fachada {
 	}
 
 
-	
+	public void disciplinasAlunos(String cpf, String status) {
+
+		dc.getDr().getDisciplinaLista().clear();
+		aodc.getAod().getAluno_oferta_disciplinaLista().clear();
+
+		String sql = "SELECT * FROM aluno_oferta_disciplina JOIN disciplina ON aluno_oferta_disciplina.codigo = disciplina.codigo WHERE "
+				+ "aluno_oferta_disciplina.cpf =  '" + cpf + "'";
+
+		if(status != null && !status.trim().equals("")) {
+			sql += "AND aluno_oferta_disciplina.ativo = '" + "Cursando" + "'";
+		}
+
+		Aluno_Oferta_Disciplina aluno_oferta_disciplina;
+		Disciplina disciplina;
+
+		Conexao.getInstance().buscarSQL(sql);
+
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				aluno_oferta_disciplina = new Aluno_Oferta_Disciplina(Conexao.getInstance().getResultset().getString("cpf"),Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")),Double.parseDouble(Conexao.getInstance().getResultset().getString("nota_1")),
+						Double.parseDouble(Conexao.getInstance().getResultset().getString("nota_2")), Double.parseDouble(Conexao.getInstance().getResultset().getString("media_final")), 
+						Integer.parseInt(Conexao.getInstance().getResultset().getString("frequencia")),
+						Conexao.getInstance().getResultset().getString("ativo"));
+				aodc.getAod().getAluno_oferta_disciplinaLista().add(aluno_oferta_disciplina);
+
+				disciplina = new Disciplina(0
+						,Conexao.getInstance().getResultset().getString("nome")
+						,"",0,'W',0,0);
+				dc.getDr().getDisciplinaLista().add(disciplina);
+
+			}
+
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);
+
+
+	}
+
+	public int buscarPosiçãoDisciplina(String nome) {
+		int cont = 0;
+
+
+		for(Disciplina a : dc.getDr().getDisciplinaLista()) {
+			if(!(a.getNome().equals(nome))) {
+				cont++;
+			}else {
+				return cont;
+			}
+		}
+
+		return 0;
+
+	}
+
+	public int buscarPosicaoAluno(String nome) {
+		int cont = 0;
+
+		for(Usuario u : uc.getUsuarioRepositorio().getListaUsuario()){
+			if(!(u.getNome().equals(nome))) {
+				cont++;
+			}else {
+				return cont;
+			}
+
+		}
+		return 0;
+	}
+	public void disciplinasOfertadas(String cpf, int codigo) {
+		String sql = "SELECT * FROM oferta_disciplina JOIN disciplina ON oferta_disciplina.codigo = disciplina.codigo";
+		int aux = 0;
+		Oferta_Disciplina oferta;
+		odc.getOd().getOferta_disciplinalista().clear();
+		dc.getDr().getDisciplinaLista().clear();
+
+		if(cpf != null & !cpf.trim().equals("")) {
+			sql += " WHERE oferta_disciplina.cpf = '" + cpf + "'";
+			aux = 1;
+		}
+		if(aux == 0) {
+			sql += " WHERE oferta_disciplina.ativo = 'S'";
+			aux = 1;
+		}else {
+			sql += " AND oferta_disciplina.ativo = 'S'";
+		}
+
+		if(codigo != 0) {
+			if(aux == 0) {
+				sql += "WHERE disciplina.codigo_curso = " + codigo;
+			}else {
+				sql += "AND disciplina.codigo_curso = " + codigo; 
+			}
+		}
+		Disciplina disciplina;
+		Conexao.getInstance().buscarSQL(sql);
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				oferta = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						Conexao.getInstance().getResultset().getString("cpf"));
+				odc.getOd().getOferta_disciplinalista().add(oferta);
+
+				disciplina = new Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo"))
+						,Conexao.getInstance().getResultset().getString("nome")
+						,"",0,'W',0,0);
+				dc.getDr().getDisciplinaLista().add(disciplina);
+
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);	
+	}
+
+	public void alunosDisciplina(String nomedisciplina) {
+		Fachada.getInstace().getDc().getDr().getDisciplinaLista().clear();
+		int codigo = Fachada.getInstace().getDc().buscarCodigo(nomedisciplina);;
+
+		String sql = "SELECT * FROM aluno_oferta_disciplina JOIN usuario ON aluno_oferta_disciplina.cpf = usuario.cpf WHERE aluno_oferta_disciplina.codigo = " + codigo ;
+
+		Aluno_Oferta_Disciplina aluno_disciplina;
+		Usuario usuario;
+		aodc.getAod().getAluno_oferta_disciplinaLista().clear();
+		uc.getUsuarioRepositorio().getListaUsuario().clear();
+
+		Conexao.getInstance().buscarSQL(sql);
+
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				aluno_disciplina = new Aluno_Oferta_Disciplina(Conexao.getInstance().getResultset().getString("cpf"),Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")),Double.parseDouble(Conexao.getInstance().getResultset().getString("nota_1")),
+						Double.parseDouble(Conexao.getInstance().getResultset().getString("nota_2")), Double.parseDouble(Conexao.getInstance().getResultset().getString("media_final")), 
+						Integer.parseInt(Conexao.getInstance().getResultset().getString("frequencia")),
+						Conexao.getInstance().getResultset().getString("ativo"));
+				aodc.getAod().getAluno_oferta_disciplinaLista().add(aluno_disciplina);
+
+				usuario = new Usuario(Conexao.getInstance().getResultset().getString("cpf"), Conexao.getInstance().getResultset().getString("nome"),
+						Conexao.getInstance().getResultset().getString("email"), Conexao.getInstance().getResultset().getString("sexo").charAt(0), 
+						Conexao.getInstance().getResultset().getString("telefone"),
+						Conexao.getInstance().getResultset().getString("senha"),
+						Conexao.getInstance().getResultset().getString("ativo").charAt(0));
+				uc.getUsuarioRepositorio().getListaUsuario().add(usuario);
+
+			}
+
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);
+
+
+	}
+
+	public void inativarOferta(int codigo2) {
+		String sql = "SELECT COUNT(*) as cont FROM aluno_oferta_disciplina JOIN oferta_disciplina ON aluno_oferta_disciplina.codigo = oferta_disciplina.codigo WHERE aluno_oferta_disciplina.ativo = 'Cursando' AND aluno_oferta_disciplina.codigo = " + codigo2;
+		int codigo = -1;
+
+		Conexao.getInstance().buscarSQL(sql);
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				codigo = Integer.parseInt(Conexao.getInstance().getResultset().getString("cont"));
+			}
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);
+
+		if(codigo == 0) {
+			odc.inativarOferta_Disciplina(codigo2);
+		}
+
+	}
+
+	public void definirSituacao() {
+		@SuppressWarnings("unused")
+		Aluno_Oferta_Disciplina a;
+		aodc.buscarAluno_Disciplina(a = new Aluno_Oferta_Disciplina(""));
+
+		for(Aluno_Oferta_Disciplina a2 : aodc.getAod().getAluno_oferta_disciplinaLista()) {
+			aodc.alterarStatus(a2);
+		}
+
+	}
 
 
 
+	public void buscarPerfil(String type) {
+		String sql = "SELECT usuario.* FROM usuario JOIN ";
+		Usuario usuario;
+		if(type.equals("coordenador")) {
+			sql += "coordenador ON usuario.cpf = coordenador.cpf";
+		}else if(type.equals("professor")) {
+			sql += "professor ON usuario.cpf = professor.cpf";
+		}else if(type.equals("aluno")) {
+			sql += "aluno ON usuario.cpf = aluno.cpf";
+		}
+		
+		Conexao.getInstance().buscarSQL(sql);
+		uc.getUsuarioRepositorio().getListaUsuario().clear();
+
+		try {
+			while (Conexao.getInstance().getResultset().next()) {
+
+				usuario = new Usuario(Conexao.getInstance().getResultset().getString("cpf"), Conexao.getInstance().getResultset().getString("nome"),
+						Conexao.getInstance().getResultset().getString("email"), Conexao.getInstance().getResultset().getString("sexo").charAt(0), 
+						Conexao.getInstance().getResultset().getString("telefone"),
+						Conexao.getInstance().getResultset().getString("senha"),
+						Conexao.getInstance().getResultset().getString("ativo").charAt(0));
+				uc.getUsuarioRepositorio().getListaUsuario().add(usuario);
+
+			}
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Conexao.getInstance().setResultset(null);
+	}
+
+		public void cadastrarOferta(String nomeDisciplina, String nomeProfessor, String dia_1, String dia_2, String hora_1, String hora_2) {
+			Oferta_Disciplina o;
+			
+			int cod = dc.buscarCodigo(nomeDisciplina);
+			
+			String cpf = uc.buscarCodigo(nomeProfessor);
+			
+			o = new Oferta_Disciplina(cod, dia_1, dia_2, hora_1, hora_2,'S',cpf); 
+			
+			try {
+				odc.inserirOferta_Disciplina(o);
+			} catch (CampoVazioException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
+	//	public void cadastrarAluno() {
+	//		
+	//		alunoc.inserirAluno(a);
+	//	}
+	//	public void cadastrarProfessor() {
+	//		
+	//		pc.inserirProfessor(cpf);
+	//	}
+	//	public void cadastradorCoordenador() {
+	//		
+	//		
+	//		cc.inserirCoordenador(c);
+	//	}
 
 }

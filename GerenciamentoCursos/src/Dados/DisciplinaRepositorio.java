@@ -40,12 +40,13 @@ public class DisciplinaRepositorio {
 	//BUSCAR DISCIPLINA
 		public void buscarDisciplina(String sql) {
 		Conexao.getInstance().buscarSQL(sql);
+		disciplinaLista.clear();
 		try {
 			while(Conexao.getInstance().getResultset().next()) {
 				disciplina = new Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo"))
 						,Conexao.getInstance().getResultset().getString("nome")
 						,Conexao.getInstance().getResultset().getString("ementa")
-						,Integer.parseInt(Conexao.getInstance().getResultset().getString("numero_creditos"))
+						,Integer.parseInt(Conexao.getInstance().getResultset().getString("num_creditos"))
 						,Conexao.getInstance().getResultset().getString("ativo").charAt(0)
 						,Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_curso"))
 						,Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_turma")));

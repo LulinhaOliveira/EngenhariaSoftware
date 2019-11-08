@@ -125,8 +125,8 @@ public class GerenciamentoOfertas extends JFrame {
 		JButton button = new JButton("<-");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
 				PainelCoordenador.getInstace().setVisible(true);	
+				dispose();
 			}
 		});
 		button.setBounds(10, 11, 51, 23);

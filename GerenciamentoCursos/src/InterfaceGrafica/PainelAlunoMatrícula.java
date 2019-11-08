@@ -7,22 +7,32 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
+
+import Exception.CampoVazioException;
+import Negocio.Entidades.Aluno_Oferta_Disciplina;
+import Negocio.Entidades.Disciplina;
+import Negocio.Fachada.Fachada;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PainelAlunoMatrícula extends JFrame {
 
 	private JPanel contentPane;
+	JComboBox <String> comboBox = new JComboBox <String >();
+	JTextArea textArea = new JTextArea();
 	public static PainelAlunoMatrícula instance;
-    public static PainelAlunoMatrícula getInstace() {
-    	if (PainelAlunoMatrícula.instance == null) {
+	public static PainelAlunoMatrícula getInstace() {
+		if (PainelAlunoMatrícula.instance == null) {
 			return PainelAlunoMatrícula.instance = new PainelAlunoMatrícula();
 		}
 		return PainelAlunoMatrícula.instance;
-    }
+	}
 
 	/**
 	 * Launch the application.
@@ -40,47 +50,84 @@ public class PainelAlunoMatrícula extends JFrame {
 		});
 	}
 
+	public void preencheCMB() {
+		Fachada.getInstace().disciplinasOfertadas("",TelaLogin.getCurso_aluno_coord());
+
+		for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+			comboBox.addItem(d.getNome());
+		}
+	}
+
+
 	/**
 	 * Create the frame.
 	 */
 	public PainelAlunoMatrícula() {
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(115, 135, 450, 214);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 480, 318);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel label = new JLabel("Painel Do Aluno");
 		label.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		label.setBounds(85, 11, 302, 34);
+		label.setBounds(130, 11, 302, 34);
 		contentPane.add(label);
-		
-		@SuppressWarnings("rawtypes")
-		JComboBox comboBox = new JComboBox();
+
+
 		comboBox.setBounds(95, 56, 284, 22);
 		contentPane.add(comboBox);
-		
+
 		JLabel lblDisciplinas = new JLabel("Disciplinas");
 		lblDisciplinas.setBounds(10, 56, 69, 14);
 		contentPane.add(lblDisciplinas);
-		
+
 		JButton btnMatrcularse = new JButton("Matr\u00EDcular-se");
+		btnMatrcularse.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				@SuppressWarnings("unused")
+				Aluno_Oferta_Disciplina a ;
+				try {
+					int pos = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getAodc().inserirAluno_Disciplina(a =  new Aluno_Oferta_Disciplina(TelaLogin.getCpf(),Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(pos).getCodigo(),0,0,0,0,"Cursando"));
+				} catch (CampoVazioException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				PainelAluno.getInstace().preencheCMB();
+
+			}
+		});
 		btnMatrcularse.setBounds(266, 142, 135, 23);
 		contentPane.add(btnMatrcularse);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(20, 89, 195, 76);
 		contentPane.add(scrollPane);
-		
-		JTextArea textArea = new JTextArea();
+
+
 		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
+
+		preencheCMB();
 		
 		JButton btnNewButton = new JButton("Ver");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String)comboBox.getSelectedItem());
+
+				textArea.setText("Dia 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_1() 
+						+ "\nDia 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_2() 
+						+ "\nHora 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_1()
+						+ "\nHora 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_2()
+						);
+
+			}
+		});
 		btnNewButton.setBounds(266, 89, 135, 23);
 		contentPane.add(btnNewButton);
-		
-	}
 
+	}
 }

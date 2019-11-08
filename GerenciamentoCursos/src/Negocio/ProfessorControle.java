@@ -58,5 +58,18 @@ public class ProfessorControle {
 		pr.buscarProfessor(sql);
 	
 	}
+	
+	public boolean isProfessor(String cpf) {
+		Professor p = new Professor(cpf);
+		
+		buscarProfessores(p);
+		
+		if(pr.getListaProfessor().size() > 0) {
+			return true;
+		}
+		
+		return false;
+		
+	}
     
 }

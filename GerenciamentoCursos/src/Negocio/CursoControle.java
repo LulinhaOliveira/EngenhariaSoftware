@@ -44,6 +44,8 @@ public class CursoControle {
 			if(curso.getCpf_coordenador() != null && !(curso.getCpf_coordenador().trim().equals(""))) {
 				sql += ",cpf_coordenador";
 				auxSQL += ",'" + curso.getCpf_coordenador() + "'";
+			}else {
+				throw new CampoVazioException();
 			}
 			sql += ")" + auxSQL + ")";
 			
@@ -81,10 +83,10 @@ public class CursoControle {
 		if(curso.getCpf_coordenador() != null && !(curso.getCpf_coordenador().trim().equals(""))) {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "cpf_coordeandor = '" + curso.getCpf_coordenador() + "'";
+				sql += "cpf_coordenador = '" + curso.getCpf_coordenador() + "'";
 				aux = 1;
 			}else {
-				sql += " AND " + "cpf_coordeandor = '" + curso.getCpf_coordenador() + "'";
+				sql += " AND " + "cpf_coordenador = '" + curso.getCpf_coordenador() + "'";
 			}
 		}
 		if(curso.getHorario_funcionamento() != null && !(curso.getHorario_funcionamento().trim().equals(""))) {

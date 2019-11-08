@@ -102,10 +102,11 @@ public class PainelCoordenador extends JFrame {
 		JButton button = new JButton("<-");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
+				
 				TelaLogin.setCpf(null);
 				TelaLogin.setCurso_aluno_coord(-1);
 				TelaLogin.getInstace().setVisible(true);
+				dispose();
 			}
 		});
 		button.setBounds(10, 0, 47, 23);

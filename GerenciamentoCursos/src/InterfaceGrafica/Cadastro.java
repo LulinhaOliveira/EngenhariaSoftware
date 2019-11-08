@@ -8,7 +8,9 @@ import javax.swing.border.EmptyBorder;
 
 import Exception.CampoVazioException;
 import Negocio.Entidades.Curso;
+import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
+import Negocio.Entidades.Usuario;
 import Negocio.Fachada.Fachada;
 
 import javax.swing.JLabel;
@@ -38,8 +40,8 @@ public class Cadastro extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JLabel lblCurso;
 	private JTextField textField_6;
-	private JComboBox<String> comboBox;
-	private JComboBox<String> comboBox_1;
+	private JComboBox <String> comboBox = new JComboBox <String>();
+	private JComboBox <String> comboBox_1 = new JComboBox <String>();
 	public static Cadastro instance;
 	public static Cadastro getInstace()  {
 		if (Cadastro.instance == null) {
@@ -47,8 +49,27 @@ public class Cadastro extends JFrame {
 		}
 		return Cadastro.instance;
 	}
-
-
+	
+	public void preencherCMBDisciplina(){
+		comboBox.removeAllItems();
+		@SuppressWarnings("unused")
+		Disciplina d;
+		Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina("",TelaLogin.getCurso_aluno_coord()));
+		
+		for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+			comboBox.addItem(d2.getNome());
+		}
+	}
+	
+	public void preencherCMBProfessores() {
+		comboBox_1.removeAllItems();
+		Fachada.getInstace().buscarPerfil("professor");
+		
+		for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+			comboBox_1.addItem(u.getNome());
+		}
+		
+	}
 	static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -183,9 +204,13 @@ public class Cadastro extends JFrame {
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(TelaLogin.getInstace().getAdmCor() == 0) {
-						//Cadastra no Curso do Coordenador
+						@SuppressWarnings("unused")
+						Disciplina d;
+						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',TelaLogin.getCurso_aluno_coord(),Integer.parseInt(textField_4.getText())));
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-						//Cadastra em Qualquer Curso.
+						@SuppressWarnings("unused")
+						Disciplina d;
+						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',Integer.parseInt(textField_3.getText()),Integer.parseInt(textField_4.getText())));
 					}				
 				}
 			});
@@ -460,14 +485,16 @@ public class Cadastro extends JFrame {
 
 
 		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
-			comboBox = new JComboBox<String>();
 			comboBox.setBounds(44, 61, 339, 20);
 			contentPane.add(comboBox);
 
-			comboBox_1 = new JComboBox<String>();
+			
 			comboBox_1.setBounds(44, 105, 339, 20);
 			contentPane.add(comboBox_1);
 
+			preencherCMBDisciplina();
+			preencherCMBProfessores();
+			
 			JLabel lblLabel = new JLabel("Dia 1");
 			lblLabel.setBounds(10, 126, 164, 14);
 			contentPane.add(lblLabel);
@@ -506,6 +533,7 @@ public class Cadastro extends JFrame {
 
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText());
 				}
 			});
 		}

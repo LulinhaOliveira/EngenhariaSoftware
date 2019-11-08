@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import Negocio.Entidades.Curso;
+import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
 import Negocio.Fachada.Fachada;
 
@@ -50,9 +51,21 @@ public class Atualizar extends JFrame {
 			}
 		}else if(GerenciamentoDeDisciplinas.getInstace().isVisible() == true) {
 			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Turmas do Curso do Coordenador (preencherCMB)
+				@SuppressWarnings("unused")
+				Disciplina d;
+				Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina(0,"","", 0,'W',TelaLogin.getCurso_aluno_coord(),0));
+
+				for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+					comboBox.addItem(d2.getNome());
+				}
 			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Turmas (Administrador) (preencherCMB)
+				@SuppressWarnings("unused")
+				Disciplina d;
+				Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina(0,"","", 0,'W',0,0));
+
+				for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+					comboBox.addItem(d2.getNome());
+				}
 			}
 		}else if(GerenciamentoDeTurmas.getInstace().isVisible() == true) {
 			@SuppressWarnings("unused")
@@ -210,12 +223,20 @@ public class Atualizar extends JFrame {
 
 			btnAtualizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Disciplina d = new Disciplina(0,textField.getText(),textField_1.getText(),Integer.parseInt(textField_2.getText()),'W',0,0);
+					Fachada.getInstace().getDc().atualizarDisciplina(d , (String)comboBox.getSelectedItem());
+					preencheCMB();
 
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Disciplina d = new Disciplina(0,(String)comboBox.getSelectedItem(),"",0,'W',0,0);
+					Fachada.getInstace().getDc().buscarDisciplina(d);
+					for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+						textArea.setText(d2.toString());
+					}
 
 				}
 			});

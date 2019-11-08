@@ -20,6 +20,14 @@ public class Aluno_Oferta_Disciplina {
 		this.frequencia = frequencia;
 		this.ativo = ativo;
 	}
+	public Aluno_Oferta_Disciplina(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	public Aluno_Oferta_Disciplina (String cpf , int codigo) {
+		this.cpf = cpf;
+		this.codigo = codigo;
+	}
 	
 	public String getCpf() {
 		return cpf;

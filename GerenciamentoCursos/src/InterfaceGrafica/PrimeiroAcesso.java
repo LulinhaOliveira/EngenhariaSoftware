@@ -5,17 +5,28 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
+
+import Negocio.Fachada.Fachada;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 @SuppressWarnings("serial")
 public class PrimeiroAcesso extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-
+	private JPasswordField textField;
+	public static PrimeiroAcesso instance;
+	public static PrimeiroAcesso getInstace() {
+		if (PrimeiroAcesso.instance == null) {
+			return PrimeiroAcesso.instance = new PrimeiroAcesso();
+		}
+		return PrimeiroAcesso.instance;
+	}
 	/**
 	 * Launch the application.
 	 */
@@ -36,19 +47,25 @@ public class PrimeiroAcesso extends JFrame {
 	 * Create the frame.
 	 */
 	public PrimeiroAcesso() {
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
+		textField = new JPasswordField();
 		textField.setBounds(97, 126, 237, 20);
 		contentPane.add(textField);
 		textField.setColumns(10);
 		
 		JButton btnNovaSenha = new JButton("Nova Senha");
+		btnNovaSenha.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e) {
+				Fachada.getInstace().getUc().atualizarUsuario("00000000000", "", "", "", textField.getText());
+			}
+		});
 		btnNovaSenha.setBounds(151, 201, 133, 23);
 		contentPane.add(btnNovaSenha);
 		

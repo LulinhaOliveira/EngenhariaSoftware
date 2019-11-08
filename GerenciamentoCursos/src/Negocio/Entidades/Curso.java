@@ -50,4 +50,12 @@ public class Curso {
 	public void setCpf_coordenador(String cpf_coordenador) {
 		this.cpf_coordenador = cpf_coordenador;
 	}
+
+	@Override
+	public String toString() {
+		return "Nome: " + nome + "\nHorario_funcionamento: " + horario_funcionamento
+				+ "\nAtivo: " + ativo + "\nCpf_Coordenador: " + cpf_coordenador ;
+	}
+	
+
 }

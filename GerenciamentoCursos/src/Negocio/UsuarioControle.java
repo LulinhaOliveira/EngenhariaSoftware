@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import Dados.UsuarioRepositorio;
+import Exception.SenhaErradaException;
+import Exception.cpfErradoException;
+import Negocio.Entidades.Usuario;
 
 public class UsuarioControle {
     private UsuarioRepositorio up;
@@ -30,6 +33,18 @@ public class UsuarioControle {
         }
     }
 
+public String buscarCodigo(String nome) {
+		
+		up.encontrarTodosUsuarios();
+		
+		for(Usuario u : up.getListaUsuario()) {
+			if(u.getNome().equals(nome)){
+				return u.getCpf();
+			}
+		}
+		
+		return "";
+	}
     public void inserirUsuario(ArrayList<Object> data) {
         try {
 			//recebe o ultimo campo do arrayList
@@ -61,15 +76,15 @@ public class UsuarioControle {
 
     public void atualizarUsuario (String cpf, String nome, String telefone, String email, String senha) {
         try {
-            if (cpf != null &&  cpf.isEmpty()) {
+            if (cpf != null &&  !cpf.trim().equals("")) {
 				String sql = "UPDATE usuario SET";
 				int aux = 0;
-				if (nome != null && !nome.isEmpty()) {
+				if (nome != null && !nome.trim().equals("")) {
 					sql += " nome = '" + nome + "'";
 					aux = 1;
 				}
 
-				if (telefone != null && !telefone.isEmpty()) {
+				if (telefone != null && !telefone.trim().equals("")) {
 					if (aux == 1) {
 						sql += ", telefone = '" + telefone + "'";
 					} else {
@@ -78,15 +93,23 @@ public class UsuarioControle {
 					}
 				}
 
-				if (email != null && !email.isEmpty()) {
+				if (email != null && !email.trim().equals("")) {
 					if (aux == 1) {
 						sql += ", email = '" + email + "'";
 					} else {
 						sql += " email = '" + email + "'";
 					}
 				}
+				if (senha != null && !senha.trim().equals("")) {
+					if (aux == 1) {
+						sql += ", senha = '" + senha + "'";
+					} else {
+						sql += " senha = '" + senha + "'";
+					}
+				}
 				sql += " WHERE cpf = '" + cpf + "'";
-                up.atualizarUsuario(sql);
+                
+				up.atualizarUsuario(sql);
             }
         } catch(Exception e) {
             // TODO Auto-generated catch block
@@ -105,6 +128,18 @@ public class UsuarioControle {
 		}
 	}
     
-    
+	public boolean fazerLogin(String cpf, String senha) throws SenhaErradaException, cpfErradoException {
+		up.encontrarUsuario(cpf);
+		
+		if(up.getListaUsuario().size() > 0) {
+			if(up.getListaUsuario().get(0).getSenha().equals(senha)) {
+				return true;
+			}else {
+				throw new SenhaErradaException();
+			}
+		}else {
+			throw new cpfErradoException();
+		}
+	}
 
 }

@@ -5,10 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import Negocio.Fachada.Fachada;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
 public class PainelAlunoAlterarDados extends JFrame {
@@ -45,8 +50,8 @@ public class PainelAlunoAlterarDados extends JFrame {
 	 * Create the frame.
 	 */
 	public PainelAlunoAlterarDados() {
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(135, 140, 406, 242);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 480, 318);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -85,6 +90,12 @@ public class PainelAlunoAlterarDados extends JFrame {
 		textField.setColumns(10);
 		
 		JButton btnAlterar = new JButton("Alterar");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Fachada.getInstace().getUc().atualizarUsuario(TelaLogin.getCpf(), "", tTelefone.getText(),tEmail.getText(),textField.getText());
+				
+			}
+		});
 		btnAlterar.setBounds(20, 166, 91, 23);
 		contentPane.add(btnAlterar);
 		

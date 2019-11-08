@@ -32,11 +32,11 @@ public class Oferta_DisciplinaControle {
 				sql += ",dia_2";
 				auxSQL +=  ",'" + o.getDia_2() + "'" ;
 
-				if(o.getHora_1() != 0) {
+				if(o.getHora_1() != null && !o.getHora_1().trim().equals("")) {
 					sql += ",hora_1";
 					auxSQL += ",'" + o.getHora_1() + "'";
 
-					if(o.getHora_2() != 0) {
+					if(o.getHora_2() !=  null && !o.getHora_2().trim().equals("")) {
 						sql += ",hora_2";
 						auxSQL += ",'" + o.getHora_2() + "'";
 						
@@ -59,8 +59,9 @@ public class Oferta_DisciplinaControle {
 		}else {
 			throw new CampoVazioException();
 		}
-
+		
 		sql += ")" + auxSQL + ")";
+		System.out.println(sql);
 		
 		od.inserirOferta_Disciplina(sql);
 	}
@@ -79,12 +80,12 @@ public class Oferta_DisciplinaControle {
 			aux = 1;
 
 		}
-		if(o.getHora_1() != 0) {
+		if(o.getHora_1() != null && !o.getHora_1().trim().equals("")) {
 			sql += "UPDATE oferta_disciplina SET hora_1 = '" + o.getHora_1() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
 			aux = 1;
 		}
 		
-		if(o.getHora_2() != 0) {
+		if(o.getHora_2() !=  null && !o.getHora_2().trim().equals("")) {
 			sql += "UPDATE oferta_disciplina SET hora_2 = '" + o.getHora_2() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
 			aux = 1;
 		}
@@ -135,7 +136,7 @@ public class Oferta_DisciplinaControle {
 				sql += " AND " + "dia_2 = '" + o.getDia_2()  + "'";
 			}
 		}
-		if(o.getHora_1() != 0) {
+		if(o.getHora_1() !=  null && !o.getHora_1().trim().equals("")) {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "hora_1 = '" + o.getHora_1() + "'";
@@ -145,7 +146,7 @@ public class Oferta_DisciplinaControle {
 			}
 		}
 
-		if(o.getHora_2() != 0) {
+		if(o.getHora_2() !=  null && !o.getHora_2().trim().equals("")) {
 			if(aux == 0) {
 				sql += auxSQL;
 				sql += "hora_2 = '" + o.getHora_2() + "'";

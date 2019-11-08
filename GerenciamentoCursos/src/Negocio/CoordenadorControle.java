@@ -52,4 +52,16 @@ public class CoordenadorControle {
 		cp.buscarCoordenador(sql);
 	
 	}
+	
+	public boolean isCoordenador(String cpf) {
+		Coordenador c = new Coordenador(cpf);
+		
+		buscarCoordenadores(c);
+		
+		if(cp.getCoordenadoreslista().size() > 0) {
+			return true;
+		}
+		
+		return false;
+	}
 }

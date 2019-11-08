@@ -10,6 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import Negocio.Entidades.Curso;
+import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
 import Negocio.Fachada.Fachada;
 
@@ -43,9 +44,17 @@ public class Inativa extends JFrame {
 			}
 		}else if(GerenciamentoDeDisciplinas.getInstace().isVisible() == true) {
 			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Turmas do Curso do Coordenador (preencherCMB)
+				@SuppressWarnings("unused")
+				Disciplina d;
+				Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina(0,"","", 0,'S',TelaLogin.getCurso_aluno_coord(),0));
 			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Turmas (Administrador) (preencherCMB)
+				@SuppressWarnings("unused")
+				Disciplina d;
+				Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina(0,"","", 0,'S',0,0));
+			}
+
+			for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+				comboBox.addItem(d.getNome());
 			}
 		}else if(GerenciamentoDeTurmas.getInstace().isVisible() == true) {
 			@SuppressWarnings("unused")
@@ -145,11 +154,19 @@ public class Inativa extends JFrame {
 
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getDc().inativarDisciplina((String)comboBox.getSelectedItem());
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Disciplina d = new Disciplina(0,(String)comboBox.getSelectedItem(),"", 0,'S',0,0);
+					Fachada.getInstace().getDc().buscarDisciplina(d);
+
+					for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+						textArea.setText(d2.toString());
+					}
+
 				}
 			});
 		}else if(GerenciamentoDeTurmas.getInstace().isVisible() == true) {
