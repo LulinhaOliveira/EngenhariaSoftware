@@ -28,7 +28,7 @@ public class AlunoControle {
 
 			if(a.getData_início() != null && a.getData_início().trim().equals("")) {
 				sql += ",data_inicio";
-				auxSQL +=  ",'" + a.getData_início() + "'" ;
+				auxSQL +=  "," + a.getData_início() + "" ;
 
 				if(a.getCodigo_curso() != 0 ) {
 					sql += ",codigo_curso";

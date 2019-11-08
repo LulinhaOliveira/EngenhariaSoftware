@@ -61,4 +61,9 @@ public class Usuario {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
+	public String toString() {
+		return "Nome: " + this.nome + "\nEmail: " +this.email + "\nTelefone: " + this.telefone + 
+				"\nSexo: " + this.sexo;
+	}
 }

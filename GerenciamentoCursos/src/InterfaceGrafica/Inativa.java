@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
+import Negocio.Entidades.Usuario;
 import Negocio.Fachada.Fachada;
 
 import javax.swing.JComboBox;
@@ -67,22 +68,43 @@ public class Inativa extends JFrame {
 			}
 
 		}else if(GerenciamentoDeCoordenadores.getInstace().isVisible() == true) {
+			Fachada.getInstace().buscarPerfil("coordenador",'S',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
+			}
 
 		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
-			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Professor do Curso do Coordenador (preencherCMB)
-			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Professores (Administrador) (preencherCMB)
+			Fachada.getInstace().buscarPerfil("professor",'S',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
 			}
 		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
 			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Aluno do Curso do Coordenador (preencherCMB)
+				Fachada.getInstace().buscarPerfil("aluno",'S',TelaLogin.getCurso_aluno_coord());
+
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}
 			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Alunos (Administrador) (preencherCMB)
+				Fachada.getInstace().buscarPerfil("aluno",'S',0);
+
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}			
+			}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
+				Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'S');
+
+				for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+					comboBox.addItem(d.getNome());
+				}
+
 			}
-		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
-
-
 		}
 
 	}
@@ -192,42 +214,77 @@ public class Inativa extends JFrame {
 
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					
+					Fachada.getInstace().getUc().desativarUsuario(cpf);
+				}
+			});
+
+			btnVer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
 
-
-
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					
+					Fachada.getInstace().getUc().desativarUsuario(cpf);
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
 
-
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					
+					Fachada.getInstace().getUc().desativarUsuario(cpf);
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
 
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+
+					Fachada.getInstace().getOdc().inativarOferta_Disciplina(Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getCodigo());
+
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+
+					textArea.setText("Disciplina: " + Fachada.getInstace().getDc().getDr().getDisciplinaLista().get(cod).getNome()
+							+ "\n Dia 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_1()
+							+ "\n Dia 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_2()
+							+ "\n Hora 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_1()
+							+ "\n Hora 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_2()
+							);
 				}
 			});
 		}

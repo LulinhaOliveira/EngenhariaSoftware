@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
+import Negocio.Entidades.Usuario;
 import Negocio.Fachada.Fachada;
 
 @SuppressWarnings("serial")
@@ -67,22 +68,42 @@ public class Buscar extends JFrame {
 			}
 
 		}else if(GerenciamentoDeCoordenadores.getInstace().isVisible() == true) {
+			Fachada.getInstace().buscarPerfil("coordenador",'W',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
+			}
 
 		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
-			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Professor do Curso do Coordenador (preencherCMB)
-			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Professores (Administrador) (preencherCMB)
+			Fachada.getInstace().buscarPerfil("professor",'W',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
 			}
 		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
 			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Aluno do Curso do Coordenador (preencherCMB)
+				Fachada.getInstace().buscarPerfil("aluno",'W',TelaLogin.getCurso_aluno_coord());
+
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}
 			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Alunos (Administrador) (preencherCMB)
-			}
+				Fachada.getInstace().buscarPerfil("aluno",'W',0);
+
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}			}
 		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
 
+			Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'N');
 
+			for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+				comboBox.addItem(d.getNome());
+			}
 		}
 
 	}
@@ -171,6 +192,10 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
@@ -178,6 +203,10 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
@@ -185,12 +214,27 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+
+					textArea.setText("Disciplina: " + Fachada.getInstace().getDc().getDr().getDisciplinaLista().get(cod).getNome()
+							+ "\n Dia 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_1()
+							+ "\n Dia 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_2()
+							+ "\n Hora 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_1()
+							+ "\n Hora 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_2()
+							);
+
+
+
 				}
 			});
 

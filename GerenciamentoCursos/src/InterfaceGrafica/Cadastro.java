@@ -42,6 +42,8 @@ public class Cadastro extends JFrame {
 	private JTextField textField_6;
 	private JComboBox <String> comboBox = new JComboBox <String>();
 	private JComboBox <String> comboBox_1 = new JComboBox <String>();
+	JRadioButton rdbtnM = new JRadioButton("M");
+	JRadioButton rdbtnF = new JRadioButton("F");
 	public static Cadastro instance;
 	public static Cadastro getInstace()  {
 		if (Cadastro.instance == null) {
@@ -54,7 +56,7 @@ public class Cadastro extends JFrame {
 		comboBox.removeAllItems();
 		@SuppressWarnings("unused")
 		Disciplina d;
-		Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina("",TelaLogin.getCurso_aluno_coord()));
+		Fachada.getInstace().getDc().buscarDisciplina(d = new Disciplina("",TelaLogin.getCurso_aluno_coord(),'S'));
 		
 		for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
 			comboBox.addItem(d2.getNome());
@@ -63,12 +65,22 @@ public class Cadastro extends JFrame {
 	
 	public void preencherCMBProfessores() {
 		comboBox_1.removeAllItems();
-		Fachada.getInstace().buscarPerfil("professor");
+		Fachada.getInstace().buscarPerfil("professor",'S',0);
 		
 		for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
 			comboBox_1.addItem(u.getNome());
 		}
 		
+	}
+	
+	public char definirSexo() {
+		char s= 'W';
+		if(rdbtnM.isSelected()) {
+			s = 'M';
+		}else if(rdbtnF.isSelected()) {
+			s =  'F';
+		}
+		return s;
 	}
 	static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -106,7 +118,7 @@ public class Cadastro extends JFrame {
 		btnCadastrar.setBounds(174, 219, 91, 23);
 		contentPane.add(btnCadastrar);
 
-
+		rdbtnF.setSelected(true);
 		if(GerenciamentoDeCursos.getInstace().isVisible() == true) {		
 
 			JLabel lblLabel = new JLabel("Nome: ");
@@ -315,7 +327,7 @@ public class Cadastro extends JFrame {
 			contentPane.add(textField_5);
 			textField_5.setColumns(10);	
 
-			JRadioButton rdbtnM = new JRadioButton("M");
+			
 			buttonGroup.add(rdbtnM);
 			rdbtnM.setBounds(10, 192, 42, 23);
 			contentPane.add(rdbtnM);
@@ -326,7 +338,10 @@ public class Cadastro extends JFrame {
 			contentPane.add(rdbtnF);
 
 			btnCadastrar.addActionListener(new ActionListener() {
+				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().cadastrarCoordenador(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+					
 				}
 			});
 
@@ -393,7 +408,10 @@ public class Cadastro extends JFrame {
 			contentPane.add(rdbtnF);
 
 			btnCadastrar.addActionListener(new ActionListener() {
+				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().cadastrarProfessor(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+
 				}
 			});
 
@@ -474,11 +492,14 @@ public class Cadastro extends JFrame {
 				textField_6.setEnabled(false);
 			}				
 			btnCadastrar.addActionListener(new ActionListener() {
+				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
 					if(TelaLogin.getInstace().getAdmCor() == 0) {
-						//Cadastra no Curso do Coordenador
+						Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(),TelaLogin.getCurso_aluno_coord());
+						Fachada.getInstace().matriculaPrimeiroPeriodo(TelaLogin.getCurso_aluno_coord(), textField.getText());
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-						//Cadastra em Qualquer Curso.
+						Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(), Integer.parseInt(textField_6.getText()));
+						Fachada.getInstace().matriculaPrimeiroPeriodo(Integer.parseInt(textField_6.getText()), textField.getText());
 					}	
 				}
 			});
@@ -533,7 +554,10 @@ public class Cadastro extends JFrame {
 
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText());
+	
+					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField_1.getText(), textField_2.getText(), textField.getText(), textField_3.getText());
+					
+					
 				}
 			});
 		}

@@ -23,9 +23,10 @@ public class Disciplina {
 	public Disciplina(String nome) {
 		this.nome = nome;
 	}
-	public Disciplina(String nome , int codigo_curso){
+	public Disciplina(String nome , int codigo_curso, char ativo){
 		this.nome = nome;
 		this.codigo_curso = codigo_curso;
+		this.ativo = ativo;
 	}
 	public int getCodigo() {
 		return codigo;

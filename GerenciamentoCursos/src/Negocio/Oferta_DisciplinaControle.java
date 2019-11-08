@@ -26,7 +26,7 @@ public class Oferta_DisciplinaControle {
 		
 		auxSQL += "'" + o.getCodigo() + "'";
 		if(o.getDia_1() != null && !(o.getDia_1().trim().equals(""))) {
-			auxSQL += "'" + o.getDia_1() + "'";
+			auxSQL += ",'" + o.getDia_1() + "'";
 
 			if(o.getDia_2() != null && !(o.getDia_2().trim().equals(""))) {
 				sql += ",dia_2";
@@ -61,7 +61,7 @@ public class Oferta_DisciplinaControle {
 		}
 		
 		sql += ")" + auxSQL + ")";
-		System.out.println(sql);
+		
 		
 		od.inserirOferta_Disciplina(sql);
 	}
@@ -106,11 +106,13 @@ public class Oferta_DisciplinaControle {
 		od.inativarOferta_Disciplina(sql);
 	}
 
-	public void buscarOferta_Disciplina(Oferta_Disciplina o) {
+	public void buscarOferta_Disciplina(Oferta_Disciplina o, int codigo_curso) {
 		String sql = "SELECT * FROM oferta_disciplina";
 		String auxSQL = " WHERE ";
 		int aux = 0;
 
+		
+		
 		if(o.getCodigo() != 0) {
 			if(aux == 0) {
 				sql += auxSQL;

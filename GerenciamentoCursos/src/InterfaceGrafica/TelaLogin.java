@@ -86,7 +86,7 @@ public class TelaLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public TelaLogin() {
-		Conexao.getInstance().conectar();
+		
 
 		setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -207,6 +207,24 @@ public class TelaLogin extends JFrame {
 		JLabel lblSistemaEducacionalDe = new JLabel("Sistema Educacional de Gerenciamento Acad\u00EAmico");
 		lblSistemaEducacionalDe.setBounds(10, 277, 303, 14);
 		contentPane.add(lblSistemaEducacionalDe);
+		
+		JButton btnConectar = new JButton("Conectar");
+		btnConectar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(Conexao.getInstance().conectado() == false) {
+					Conexao.getInstance().conectar();
+				}else {
+					Conexao.getInstance().desconectar();
+				}
+				
+				if(Conexao.getInstance().conectado() == true)
+					JOptionPane.showMessageDialog(null, "Conectado");
+				else
+					JOptionPane.showMessageDialog(null, "Desconectado");
+			}
+		});
+		btnConectar.setBounds(10, 70, 89, 23);
+		contentPane.add(btnConectar);
 
 
 	}

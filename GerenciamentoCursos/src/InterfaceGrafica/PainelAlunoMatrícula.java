@@ -18,6 +18,8 @@ import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 
 @SuppressWarnings("serial")
@@ -51,7 +53,7 @@ public class PainelAlunoMatrícula extends JFrame {
 	}
 
 	public void preencheCMB() {
-		Fachada.getInstace().disciplinasOfertadas("",TelaLogin.getCurso_aluno_coord());
+		Fachada.getInstace().disciplinasOfertadas("",TelaLogin.getCurso_aluno_coord(),'S');
 
 		for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
 			comboBox.addItem(d.getNome());
@@ -128,6 +130,16 @@ public class PainelAlunoMatrícula extends JFrame {
 		});
 		btnNewButton.setBounds(266, 89, 135, 23);
 		contentPane.add(btnNewButton);
-
+		
+		 addWindowListener(new WindowAdapter()
+	        {
+	            @Override
+	            public void windowClosing(WindowEvent e)
+	            {
+	                PainelAluno.getInstace().preencheCMB();
+	                e.getWindow().dispose();
+	            }
+	        });
+	
 	}
 }

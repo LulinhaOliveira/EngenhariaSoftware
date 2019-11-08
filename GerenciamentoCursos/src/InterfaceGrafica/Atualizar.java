@@ -11,7 +11,9 @@ import javax.swing.border.EmptyBorder;
 
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
+import Negocio.Entidades.Oferta_Disciplina;
 import Negocio.Entidades.Turma;
+import Negocio.Entidades.Usuario;
 import Negocio.Fachada.Fachada;
 
 import javax.swing.JButton;
@@ -78,21 +80,41 @@ public class Atualizar extends JFrame {
 			}
 
 		}else if(GerenciamentoDeCoordenadores.getInstace().isVisible() == true) {
+			Fachada.getInstace().buscarPerfil("coordenador",'S',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
+			}
 
 		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
-			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Professor do Curso do Coordenador (preencherCMB)
-			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Professores (Administrador) (preencherCMB)
+			Fachada.getInstace().buscarPerfil("professor",'S',0);
+
+
+			for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+				comboBox.addItem(u.getNome());
 			}
 		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
 			if(TelaLogin.getInstace().getAdmCor() == 0) {
-				//Apenas Aluno do Curso do Coordenador (preencherCMB)
-			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-				//Todas as Alunos (Administrador) (preencherCMB)
-			}
-		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
+				Fachada.getInstace().buscarPerfil("aluno",'S',TelaLogin.getCurso_aluno_coord());
 
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}
+			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
+				Fachada.getInstace().buscarPerfil("aluno",'S',0);
+
+
+				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+					comboBox.addItem(u.getNome());
+				}			}
+		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
+			Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'S');
+
+			for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+				comboBox.addItem(d.getNome());
+			}
 
 		}
 
@@ -298,81 +320,7 @@ public class Atualizar extends JFrame {
 				}
 			});
 		}else if(GerenciamentoDeCoordenadores.getInstace().isVisible() == true) {
-			JLabel lblNewLabel_2 = new JLabel("Nome:");
-			lblNewLabel_2.setBounds(214, 92, 140, 14);
-			contentPane.add(lblNewLabel_2);
-
-			JLabel lblNewLabel_3 = new JLabel("Telefone:");
-			lblNewLabel_3.setBounds(214, 120, 140, 14);
-			contentPane.add(lblNewLabel_3);
-
-			JLabel lblNewLabel_4 = new JLabel("Senha:");
-			lblNewLabel_4.setBounds(210, 145, 130, 14);
-			contentPane.add(lblNewLabel_4);
-
-			textField = new JTextField();
-			textField.setBounds(283, 89, 141, 20);
-			contentPane.add(textField);
-			textField.setColumns(10);
-
-			textField_1 = new JTextField();
-			textField_1.setBounds(283, 117, 141, 20);
-			contentPane.add(textField_1);
-			textField_1.setColumns(10);
-
-			textField_2 = new JTextField();
-			textField_2.setBounds(283, 142, 141, 20);
-			contentPane.add(textField_2);
-			textField_2.setColumns(10);
-
-			btnAtualizar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			btnVer.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
-			JLabel lblNewLabel_2 = new JLabel("Nome:");
-			lblNewLabel_2.setBounds(214, 92, 140, 14);
-			contentPane.add(lblNewLabel_2);
-
-			JLabel lblNewLabel_3 = new JLabel("Telefone:");
-			lblNewLabel_3.setBounds(214, 120, 140, 14);
-			contentPane.add(lblNewLabel_3);
-
-			JLabel lblNewLabel_4 = new JLabel("Senha:");
-			lblNewLabel_4.setBounds(210, 145, 130, 14);
-			contentPane.add(lblNewLabel_4);
-
-			textField = new JTextField();
-			textField.setBounds(283, 89, 141, 20);
-			contentPane.add(textField);
-			textField.setColumns(10);
-
-			textField_1 = new JTextField();
-			textField_1.setBounds(283, 117, 141, 20);
-			contentPane.add(textField_1);
-			textField_1.setColumns(10);
-
-			textField_2 = new JTextField();
-			textField_2.setBounds(283, 142, 141, 20);
-			contentPane.add(textField_2);
-			textField_2.setColumns(10);
-
-			btnAtualizar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-
-			btnVer.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-				}
-			});
-		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
-			JLabel lblNewLabel_2 = new JLabel("Nome:");
+			JLabel lblNewLabel_2 = new JLabel("Email:");
 			lblNewLabel_2.setBounds(214, 92, 140, 14);
 			contentPane.add(lblNewLabel_2);
 
@@ -401,11 +349,106 @@ public class Atualizar extends JFrame {
 
 			btnAtualizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					String cpf = Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getUc().atualizarUsuario(cpf, "", textField_1.getText(), textField.getText(), textField.getText());;
+
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
+				}
+			});
+		}else if(GerenciamentoDeProfessores.getInstace().isVisible() == true) {
+			JLabel lblNewLabel_2 = new JLabel("Email:");
+			lblNewLabel_2.setBounds(214, 92, 140, 14);
+			contentPane.add(lblNewLabel_2);
+
+			JLabel lblNewLabel_3 = new JLabel("Telefone:");
+			lblNewLabel_3.setBounds(214, 120, 140, 14);
+			contentPane.add(lblNewLabel_3);
+
+			JLabel lblNewLabel_4 = new JLabel("Senha:");
+			lblNewLabel_4.setBounds(210, 145, 130, 14);
+			contentPane.add(lblNewLabel_4);
+
+			textField = new JTextField();
+			textField.setBounds(283, 89, 141, 20);
+			contentPane.add(textField);
+			textField.setColumns(10);
+
+			textField_1 = new JTextField();
+			textField_1.setBounds(283, 117, 141, 20);
+			contentPane.add(textField_1);
+			textField_1.setColumns(10);
+
+			textField_2 = new JPasswordField();
+			textField_2.setBounds(283, 142, 141, 20);
+			contentPane.add(textField_2);
+			textField_2.setColumns(10);
+
+			btnAtualizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String cpf = Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getUc().atualizarUsuario(cpf, "", textField_1.getText(), textField.getText(), textField.getText());;
+
+				}
+			});
+
+			btnVer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
+				}
+			});
+		}else if(GerenciamentoDeAlunos.getInstace().isVisible() == true) {
+			JLabel lblNewLabel_2 = new JLabel("Email:");
+			lblNewLabel_2.setBounds(214, 92, 140, 14);
+			contentPane.add(lblNewLabel_2);
+
+			JLabel lblNewLabel_3 = new JLabel("Telefone:");
+			lblNewLabel_3.setBounds(214, 120, 140, 14);
+			contentPane.add(lblNewLabel_3);
+
+			JLabel lblNewLabel_4 = new JLabel("Senha:");
+			lblNewLabel_4.setBounds(210, 145, 130, 14);
+			contentPane.add(lblNewLabel_4);
+
+			textField = new JTextField();
+			textField.setBounds(283, 89, 141, 20);
+			contentPane.add(textField);
+			textField.setColumns(10);
+
+			textField_1 = new JTextField();
+			textField_1.setBounds(283, 117, 141, 20);
+			contentPane.add(textField_1);
+			textField_1.setColumns(10);
+
+			textField_2 = new JPasswordField();
+			textField_2.setBounds(283, 142, 141, 20);
+			contentPane.add(textField_2);
+			textField_2.setColumns(10);
+
+			btnAtualizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					String cpf = Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getUc().atualizarUsuario(cpf, "", textField_1.getText(), textField.getText(), textField.getText());;
+
+				}
+			});
+
+			btnVer.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+
+					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
+
 				}
 			});
 
@@ -457,11 +500,24 @@ public class Atualizar extends JFrame {
 
 			btnAtualizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+					Oferta_Disciplina o = new Oferta_Disciplina(0,textField.getText(),textField_1.getText(),textField_2.getText(),textField_3.getText(),'W',textField_4.getText());
+					Fachada.getInstace().getOdc().atualizarOferta_Disciplina(o, Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getCodigo());
+
 				}
 			});
 
 			btnVer.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int cod = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
+
+					textArea.setText("Disciplina: " + Fachada.getInstace().getDc().getDr().getDisciplinaLista().get(cod).getNome()
+							+ "\n Dia 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_1()
+							+ "\n Dia 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getDia_2()
+							+ "\n Hora 1: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_1()
+							+ "\n Hora 2: " + Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(cod).getHora_2()
+							);
+
 				}
 			});
 

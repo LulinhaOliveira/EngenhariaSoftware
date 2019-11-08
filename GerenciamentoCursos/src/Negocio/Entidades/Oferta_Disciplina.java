@@ -18,6 +18,10 @@ public class Oferta_Disciplina {
 		this.ativo = ativo;
 		this.cpf = cpf;
 	}
+	
+	public Oferta_Disciplina() {
+		
+	}
 	public int getCodigo() {
 		return codigo;
 	}
