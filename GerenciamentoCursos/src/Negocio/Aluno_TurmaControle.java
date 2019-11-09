@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import BancoDados.Conexao;
 import Dados.Aluno_TurmaRepositorio;
-import Negocio.Entidades.Aluno_Turma;
 
 public class Aluno_TurmaControle {
 	
@@ -22,8 +21,8 @@ public class Aluno_TurmaControle {
 		this.atr = atr;
 	}
 
-	public void inserirAluno_Turma(Aluno_Turma at) {
-		String sql = "INSERT INTO aluno_turma(cpf,codigo) VALUES ('" + at.getCpf() + "'," + at.getCodigo() + ")";
+	public void inserirAluno_Turma(String cpf, int codigo) {
+		String sql = "INSERT INTO aluno_turma(cpf,codigo) VALUES ('" + cpf + "'," + codigo + ")";
 		atr.inserirAluno_Turma(sql);
 	}
 	

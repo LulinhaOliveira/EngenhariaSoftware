@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import BancoDados.Conexao;
 import Exception.CampoVazioException;
+import Exception.TurmaExisteAlunoException;
 import Negocio.AdministradorControle;
 import Negocio.AlunoControle;
 import Negocio.Aluno_Oferta_DisciplinaControle;
@@ -19,6 +20,7 @@ import Negocio.TurmaControle;
 import Negocio.UsuarioControle;
 import Negocio.Entidades.Aluno;
 import Negocio.Entidades.Aluno_Oferta_Disciplina;
+import Negocio.Entidades.Aluno_Turma;
 import Negocio.Entidades.Coordenador;
 import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Oferta_Disciplina;
@@ -383,7 +385,7 @@ public class Fachada {
 			sql += " WHERE usuario.ativo = 'S'";
 			aux = 1;
 		}
-		
+
 		if(codigo != 0) {
 			if(aux == 0) {
 				sql += " WHERE aluno.codigo_curso = " + codigo;
@@ -417,6 +419,32 @@ public class Fachada {
 		Conexao.getInstance().setResultset(null);
 	}
 
+	public boolean ofertaExiste(int codigo) {
+		String sql = "SELECT COUNT(*) as cont FROM oferta_disciplina WHERE oferta_disciplina.codigo = " + codigo;
+		int cont = -1;
+		Conexao.getInstance().buscarSQL(sql);
+
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				cont = Integer.parseInt(Conexao.getInstance().getResultset().getString("cont"));
+			}
+
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Conexao.getInstance().setResultset(null);
+		if(cont == 0) {
+			return false;
+		}
+
+		return true;
+
+
+
+	}
 	public void cadastrarOferta(String nomeDisciplina, String nomeProfessor, String dia_1, String dia_2, String hora_1, String hora_2) {
 		Oferta_Disciplina o;
 
@@ -426,111 +454,165 @@ public class Fachada {
 
 		o = new Oferta_Disciplina(cod, dia_1, dia_2, hora_1, hora_2,'S',cpf); 
 
+		if(ofertaExiste(cod) == true) {
+			odc.atualizarOferta_Disciplina(o, cod);
+		}else {
+			try {
+				odc.inserirOferta_Disciplina(o);
+			} catch (CampoVazioException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) {
+		ArrayList<Object> myList = new ArrayList<Object>();
+		myList.add(cpf);
+		myList.add(nome);
+		myList.add(email);
+		myList.add(sexo);
+		myList.add(telefone);
+		myList.add(password);
+
+		uc.inserirUsuario(myList);
+		Aluno a = new Aluno(cpf,"CURDATE()",codigo_curso,cpf,'S');
+
 
 
 		try {
-			odc.inserirOferta_Disciplina(o);
+			alunoc.inserirAluno(a);
+		} catch (CampoVazioException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) {
+		ArrayList<Object> myList = new ArrayList<Object>();
+		myList.add(cpf);
+		myList.add(nome);
+		myList.add(email);
+		myList.add(sexo);
+		myList.add(telefone);
+		myList.add(password);
+
+		uc.inserirUsuario(myList);
+
+		pc.inserirProfessor(cpf);
+	}
+	public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) {
+		ArrayList<Object> myList = new ArrayList<Object>();
+		myList.add(cpf);
+		myList.add(nome);
+		myList.add(email);
+		myList.add(sexo);
+		myList.add(telefone);
+		myList.add(password);
+
+		uc.inserirUsuario(myList);
+
+		Coordenador c = new Coordenador(cpf);
+		try {
+			cc.inserirCoordenador(c);
 		} catch (CampoVazioException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+	public void matriculaPrimeiroPeriodo(int codigo_curso, String cpf) {
+		String sql = "SELECT * FROM oferta_disciplina JOIN disciplina ON"
+				+ " oferta_disciplina.codigo = disciplina.codigo JOIN turma ON disciplina.codigo_turma = turma.codigo WHERE"
+				+ " disciplina.codigo_curso = " + codigo_curso + " AND turma.semestre = 1" ;
+		Oferta_Disciplina oferta;
+		Disciplina disciplina;
+		odc.getOd().getOferta_disciplinalista().clear();
+		Conexao.getInstance().buscarSQL(sql);
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				oferta = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						Conexao.getInstance().getResultset().getString("cpf"));
+				odc.getOd().getOferta_disciplinalista().add(oferta);
+				
+				disciplina =  new Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo"))
+						,Conexao.getInstance().getResultset().getString("nome")
+						,Conexao.getInstance().getResultset().getString("ementa")
+						,Integer.parseInt(Conexao.getInstance().getResultset().getString("num_creditos"))
+						,Conexao.getInstance().getResultset().getString("ativo").charAt(0)
+						,Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_curso"))
+						,Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_turma")));
+					dc.getDr().getDisciplinaLista().add(disciplina);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);
 
-		public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) {
-			ArrayList<Object> myList = new ArrayList<Object>();
-			myList.add(cpf);
-			myList.add(nome);
-			myList.add(email);
-			myList.add(sexo);
-			myList.add(telefone);
-			myList.add(password);
-			
-			uc.inserirUsuario(myList);
-			Aluno a = new Aluno(cpf,"CURDATE()",codigo_curso,cpf,'S');
-			
-			
-			
-			try {
-				alunoc.inserirAluno(a);
-			} catch (CampoVazioException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) {
-			ArrayList<Object> myList = new ArrayList<Object>();
-			myList.add(cpf);
-			myList.add(nome);
-			myList.add(email);
-			myList.add(sexo);
-			myList.add(telefone);
-			myList.add(password);
-			
-			uc.inserirUsuario(myList);
-			
-			pc.inserirProfessor(cpf);
-		}
-		public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) {
-			ArrayList<Object> myList = new ArrayList<Object>();
-			myList.add(cpf);
-			myList.add(nome);
-			myList.add(email);
-			myList.add(sexo);
-			myList.add(telefone);
-			myList.add(password);
-			
-			uc.inserirUsuario(myList);
-			
-			Coordenador c = new Coordenador(cpf);
-			try {
-				cc.inserirCoordenador(c);
-			} catch (CampoVazioException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-		public void matriculaPrimeiroPeriodo(int codigo_curso, String cpf) {
-			String sql = "SELECT * FROM oferta_disciplina JOIN disciplina ON"
-					+ " oferta_disciplina.codigo = disciplina.codigo JOIN turma ON disciplina.codigo_turma = turma.codigo WHERE"
-					+ " disciplina.codigo_curso = " + codigo_curso + " AND turma.semestre = 1" ;
-			Oferta_Disciplina oferta;
-			odc.getOd().getOferta_disciplinalista().clear();
-			Conexao.getInstance().buscarSQL(sql);
-			try {
-				while(Conexao.getInstance().getResultset().next()) {
-					oferta = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
-							,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
-							Conexao.getInstance().getResultset().getString("cpf"));
-					odc.getOd().getOferta_disciplinalista().add(oferta);
+		int cont = 0;
+	
+		@SuppressWarnings("unused")
+		Aluno_Oferta_Disciplina a;
+		@SuppressWarnings("unused")
+		Aluno_Turma at;
+		for(Oferta_Disciplina od : Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista()) {
+			if(cont < 5) {
+				try {
+					aodc.inserirAluno_Disciplina(a = new Aluno_Oferta_Disciplina(cpf, od.getCodigo(),0,0,0,0,"Cursando"));
+					atc.inserirAluno_Turma(cpf,dc.getDr().getDisciplinaLista().get(cont).getCodigo_turma());
+				} catch (CampoVazioException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
+				cont++;
+			}else {
+				break;
 			}
-			Conexao.getInstance().setResultset(null);
-			
-			int cont = 0;
-			
-			@SuppressWarnings("unused")
-			Aluno_Oferta_Disciplina a;
-			for(Oferta_Disciplina od : Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista()) {
-				if(cont < 5) {
-					try {
-						aodc.inserirAluno_Disciplina(a = new Aluno_Oferta_Disciplina(cpf, od.getCodigo(),0,0,0,0,"Cursando"));
-					} catch (CampoVazioException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					cont++;
-				}else {
-					break;
-				}
-			}
-			
-			
 		}
+	}
 
+	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException  {
+		int codigo_turma;
+	
+			aodc.inserirAluno_Disciplina(a);
+			codigo_turma = aodc.pegarCodigoTurma(a.getCodigo());
+			atc.inserirAluno_Turma(a.getCpf(),codigo_turma);
+			
+	}
+	
+	public boolean alunos_disciplina_turma(String turma) {
+		String sql = "SELECT COUNT(*) as contador FROM aluno_oferta_disciplina JOIN disciplina ON aluno_oferta_disciplina.codigo = disciplina.codigo join turma on turma.codigo = disciplina.codigo_turma JOIN aluno_turma ON turma.codigo = aluno_turma.codigo WHERE aluno_oferta_disciplina.ativo = 'CURSANDO' AND turma.nome = " + turma;
+	
+		Conexao.getInstance().buscarSQL(sql);
+		
+		int cont = -1;
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+			 cont = Integer.parseInt(Conexao.getInstance().getResultset().getString("contador"));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);	
+		
+		if(cont == 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void inativarTurma(String turma) throws TurmaExisteAlunoException {
+		if(alunos_disciplina_turma(turma) == true) {
+			tc.inativarTurma(turma);
+		}else {
+			throw new TurmaExisteAlunoException();
+		}
+	}
+	
 }

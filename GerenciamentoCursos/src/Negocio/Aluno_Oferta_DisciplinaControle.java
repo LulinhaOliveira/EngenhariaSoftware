@@ -1,5 +1,8 @@
 package Negocio;
 
+import java.sql.SQLException;
+
+import BancoDados.Conexao;
 import Dados.Aluno_Oferta_DisciplinaRepositorio;
 import Exception.CampoVazioException;
 import Negocio.Entidades.Aluno_Oferta_Disciplina;
@@ -18,11 +21,30 @@ public class Aluno_Oferta_DisciplinaControle {
 	public void setAod(Aluno_Oferta_DisciplinaRepositorio aod) {
 		this.aod = aod;
 	}
-
+	
+	public int pegarCodigoTurma(int codigo) {
+		String sql = "SELECT * FROM disciplina WHERE codigo = '" + codigo + "'";
+		int codigo_turma = -1;
+		
+		Conexao.getInstance().buscarSQL(sql);
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				codigo_turma = Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_turma"));
+			}
+		}catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		Conexao.getInstance().setResultset(null);
+		return codigo_turma;
+	}
+	
 	public void inserirAluno_Disciplina(Aluno_Oferta_Disciplina a) throws CampoVazioException {
 		String sql = "INSERT INTO aluno_oferta_disciplina(cpf";
 		String auxSQL = "VALUES (";
-
+		
 		if(a.getCpf() != null && !(a.getCpf().trim().equals(""))) {
 			auxSQL += "'" + a.getCpf() + "'";
 

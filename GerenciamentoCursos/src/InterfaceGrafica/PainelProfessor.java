@@ -203,6 +203,7 @@ public class PainelProfessor extends JFrame {
 				Fachada.getInstace().definirSituacao();
 				int cod = Fachada.getInstace().buscarPosicaoAluno((String) cmbAlunos.getSelectedItem());	
 				Fachada.getInstace().inativarOferta(Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getCodigo());
+				Fachada.getInstace().getAtc().removerAluno_Turma(Fachada.getInstace().getAodc().pegarCodigoTurma(Fachada.getInstace().getAodc().getAod().getAluno_oferta_disciplinaLista().get(cod).getCodigo()));
 			}
 		});
 		btnEncerrarDisciplina.setBounds(297, 245, 125, 23);

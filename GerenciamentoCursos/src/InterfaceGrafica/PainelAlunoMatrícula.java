@@ -92,7 +92,7 @@ public class PainelAlunoMatrícula extends JFrame {
 				Aluno_Oferta_Disciplina a ;
 				try {
 					int pos = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
-					Fachada.getInstace().getAodc().inserirAluno_Disciplina(a =  new Aluno_Oferta_Disciplina(TelaLogin.getCpf(),Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(pos).getCodigo(),0,0,0,0,"Cursando"));
+					Fachada.getInstace().matriculaAluno(a =  new Aluno_Oferta_Disciplina(TelaLogin.getCpf(),Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(pos).getCodigo(),0,0,0,0,"Cursando"));
 				} catch (CampoVazioException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

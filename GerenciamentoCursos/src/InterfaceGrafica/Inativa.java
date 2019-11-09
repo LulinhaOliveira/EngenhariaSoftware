@@ -4,11 +4,13 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import Exception.TurmaExisteAlunoException;
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
@@ -196,7 +198,11 @@ public class Inativa extends JFrame {
 
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().getTc().inativarTurma((String)comboBox.getSelectedItem());				
+					try {
+						Fachada.getInstace().inativarTurma((String)comboBox.getSelectedItem());
+					} catch (TurmaExisteAlunoException e1) {
+						JOptionPane.showMessageDialog(null, e1.toString());
+					}				
 				}
 			});
 

@@ -94,6 +94,10 @@ public class Oferta_DisciplinaControle {
 			sql += "UPDATE oferta_disciplina SET cpf = '" + o.getCpf() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
 			aux = 1;
 		}
+		if(o.getAtivo() == 'N') {
+			sql += "UPDATE oferta_disciplina SET ativo = 'S' WHERE codigo = " + codigo_Oferta + ";";
+			aux = 1;
+		}
 		
 		if(aux == 1) {
 			od.atualizarOferta_Disciplina(sql);
