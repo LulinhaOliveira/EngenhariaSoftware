@@ -9,11 +9,14 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import Exception.CampoVazioException;
+import Exception.qtdAlunoDisciplinaMaxException;
 import Negocio.Entidades.Aluno_Oferta_Disciplina;
 import Negocio.Entidades.Disciplina;
 import Negocio.Fachada.Fachada;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -92,7 +95,11 @@ public class PainelAlunoMatrícula extends JFrame {
 				Aluno_Oferta_Disciplina a ;
 				try {
 					int pos = Fachada.getInstace().buscarPosiçãoDisciplina((String) comboBox.getSelectedItem());
-					Fachada.getInstace().matriculaAluno(a =  new Aluno_Oferta_Disciplina(TelaLogin.getCpf(),Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(pos).getCodigo(),0,0,0,0,"Cursando"));
+					try {
+						Fachada.getInstace().matriculaAluno(a =  new Aluno_Oferta_Disciplina(TelaLogin.getCpf(),Fachada.getInstace().getOdc().getOd().getOferta_disciplinalista().get(pos).getCodigo(),0,0,0,0,"Cursando"));
+					} catch (qtdAlunoDisciplinaMaxException e1) {
+						JOptionPane.showMessageDialog(null, e1.toString());
+					}
 				} catch (CampoVazioException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

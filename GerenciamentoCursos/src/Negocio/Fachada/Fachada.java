@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import BancoDados.Conexao;
 import Exception.CampoVazioException;
 import Exception.TurmaExisteAlunoException;
+import Exception.qtdAlunoDisciplinaMaxException;
 import Negocio.AdministradorControle;
 import Negocio.AlunoControle;
 import Negocio.Aluno_Oferta_DisciplinaControle;
@@ -574,13 +575,38 @@ public class Fachada {
 			}
 		}
 	}
-
-	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException  {
-		int codigo_turma;
 	
-			aodc.inserirAluno_Disciplina(a);
-			codigo_turma = aodc.pegarCodigoTurma(a.getCodigo());
-			atc.inserirAluno_Turma(a.getCpf(),codigo_turma);
+	public int qtdAluno_Disciplina(String cpf) {
+		int qtd = 0;
+		String sql = "SELECT COUNT(*) as cont FROM aluno_oferta_disciplina WHERE aluno_oferta_disciplina.cpf = '" + cpf + "' AND aluno_oferta_disciplina = 'Cursando'";
+		Conexao.getInstance().buscarSQL(sql);
+		
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				qtd = Integer.parseInt(Conexao.getInstance().getResultset().getString("cont"));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);	
+				
+				
+		return qtd;
+	}
+
+	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException, qtdAlunoDisciplinaMaxException  {
+		    int codigo_turma;
+	
+		    if(qtdAluno_Disciplina(a.getCpf()) < 5) {
+				aodc.inserirAluno_Disciplina(a);
+				codigo_turma = aodc.pegarCodigoTurma(a.getCodigo());
+				atc.inserirAluno_Turma(a.getCpf(),codigo_turma);
+		    }else {
+		    	throw new  qtdAlunoDisciplinaMaxException();
+		    }
+
 			
 	}
 	
