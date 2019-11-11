@@ -1,9 +1,5 @@
 package Teste;
 
-import BancoDados.Conexao;
-import Negocio.Entidades.Disciplina;
-import Negocio.Fachada.Fachada;
-
 public class Main {
 
 	public static void main(String[] args) {

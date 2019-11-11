@@ -26,7 +26,7 @@ public class AlunoControle {
 		if(a.getCpf() != null && !(a.getCpf().trim().equals(""))) {
 			auxSQL += "'" + a.getCpf() + "'";
 
-			if(a.getData_início() != null && a.getData_início().trim().equals("")) {
+			if(a.getData_início() != null && !a.getData_início().trim().equals("")) {
 				sql += ",data_inicio";
 				auxSQL +=  "," + a.getData_início() + "" ;
 
@@ -50,9 +50,9 @@ public class AlunoControle {
 		}else {
 			throw new CampoVazioException();
 		}
-
+		
 		sql += ")" + auxSQL + ")";
-
+		
 		ar.inserirAluno(sql);
 	}
 

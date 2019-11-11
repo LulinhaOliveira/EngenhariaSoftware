@@ -39,6 +39,7 @@ public class DisciplinaRepositorio {
 		
 	//BUSCAR DISCIPLINA
 		public void buscarDisciplina(String sql) {
+
 		Conexao.getInstance().buscarSQL(sql);
 		disciplinaLista.clear();
 		try {

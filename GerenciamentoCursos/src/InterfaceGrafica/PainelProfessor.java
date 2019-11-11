@@ -62,7 +62,7 @@ public class PainelProfessor extends JFrame {
 	}
 	public void preencheCMBAlunos() {
 		cmbAlunos.removeAllItems();
-		Fachada.getInstace().alunosDisciplina((String)cmbDisciplinasOfertadas.getSelectedItem());
+		Fachada.getInstace().alunosDisciplina((String)cmbDisciplinasOfertadas.getSelectedItem(),0, TelaLogin.getCpf());
 
 		for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
 			cmbAlunos.addItem(u.getNome());

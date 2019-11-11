@@ -246,7 +246,7 @@ public class Atualizar extends JFrame {
 			btnAtualizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					Disciplina d = new Disciplina(0,textField.getText(),textField_1.getText(),Integer.parseInt(textField_2.getText()),'W',0,0);
-					Fachada.getInstace().getDc().atualizarDisciplina(d , (String)comboBox.getSelectedItem());
+					Fachada.getInstace().getDc().atualizarDisciplina(d , (String)comboBox.getSelectedItem(),0);
 					preencheCMB();
 
 				}

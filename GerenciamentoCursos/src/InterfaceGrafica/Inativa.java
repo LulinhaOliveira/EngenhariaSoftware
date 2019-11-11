@@ -178,7 +178,7 @@ public class Inativa extends JFrame {
 
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().getDc().inativarDisciplina((String)comboBox.getSelectedItem());
+					Fachada.getInstace().getDc().inativarDisciplina((String)comboBox.getSelectedItem(),0);
 				}
 			});
 

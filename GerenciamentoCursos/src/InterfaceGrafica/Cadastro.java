@@ -495,10 +495,20 @@ public class Cadastro extends JFrame {
 				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
 					if(TelaLogin.getInstace().getAdmCor() == 0) {
-						Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(),TelaLogin.getCurso_aluno_coord());
+						try {
+							Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(),TelaLogin.getCurso_aluno_coord());
+						} catch (CampoVazioException e1) {
+							JOptionPane.showMessageDialog(null, e1.toString("Nenhum Campo Pode Ser"));
+						}
 						Fachada.getInstace().matriculaPrimeiroPeriodo(TelaLogin.getCurso_aluno_coord(), textField.getText());
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
-						Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(), Integer.parseInt(textField_6.getText()));
+						try {
+							Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(), Integer.parseInt(textField_6.getText()));
+						} catch (NumberFormatException e1) {
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (CampoVazioException e1) {
+							JOptionPane.showMessageDialog(null, e1.toString("Nenhum Campo Pode Ser"));
+						}
 						Fachada.getInstace().matriculaPrimeiroPeriodo(Integer.parseInt(textField_6.getText()), textField.getText());
 					}	
 				}
@@ -555,7 +565,7 @@ public class Cadastro extends JFrame {
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 	
-					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField_1.getText(), textField_2.getText(), textField.getText(), textField_3.getText());
+					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField_1.getText(), textField_2.getText(), textField.getText(), textField_3.getText(), TelaLogin.getCurso_aluno_coord());
 					
 					
 				}

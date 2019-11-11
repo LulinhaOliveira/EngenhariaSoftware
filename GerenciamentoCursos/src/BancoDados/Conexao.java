@@ -3,12 +3,9 @@ package BancoDados;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 
 import javax.swing.JOptionPane;
-
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 public class Conexao {
 	public static Conexao instance;

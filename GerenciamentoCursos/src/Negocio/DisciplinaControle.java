@@ -1,18 +1,21 @@
 package Negocio;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import BancoDados.Conexao;
 import Dados.DisciplinaRepositorio;
 import Negocio.Entidades.Disciplina;
 
 public class DisciplinaControle {
 	private DisciplinaRepositorio dr;
-	
+
 	public DisciplinaControle() {
 		dr = new DisciplinaRepositorio();
 	}
-	
-	
-	
+
+
+
 	public DisciplinaRepositorio getDr() {
 		return dr;
 	}
@@ -25,12 +28,46 @@ public class DisciplinaControle {
 
 
 
-	public int buscarCodigo(String disciplina) {
-		
-		Disciplina d = new Disciplina(disciplina);
-		buscarDisciplina(d);
+	public int buscarCodigo(String disciplina, int codigo, String cpf) {
+		String sql = "SELECT * FROM disciplina WHERE nome = '" + disciplina  + "' AND ativo = 'S'"; 
 
-		return dr.getDisciplinaLista().get(0).getCodigo();
+		if(codigo != 0) {
+			sql +=  " AND codigo_curso = " + codigo;
+		}else {
+			String sql1 = "SELECT * FROM oferta_disciplina JOIN disciplina ON oferta_disciplina.codigo = disciplina.codigo "
+					+ "WHERE oferta_disciplina.cpf = '" + cpf + "' AND disciplina.nome = '" + disciplina +"'";
+			int curso = -1;
+			Conexao.getInstance().buscarSQL(sql1);
+			
+			try {
+				while(Conexao.getInstance().getResultset().next()) {
+					curso = Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo_curso"));
+				}
+			} catch (NumberFormatException e){
+				e.printStackTrace();
+			} catch (SQLException e) {
+				e.printStackTrace();
+				
+			}
+			Conexao.getInstance().setResultset(null);
+		
+			sql += " AND codigo_curso = " + curso;
+		}
+		Conexao.getInstance().buscarSQL(sql);
+		int codigo2 = -1;
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				codigo2 = Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo"));
+			}
+		} catch (NumberFormatException e){
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+		}
+		Conexao.getInstance().setResultset(null);
+		
+		return codigo2;
 	}
 
 	public void buscarDisciplina(Disciplina disciplina) {
@@ -87,7 +124,7 @@ public class DisciplinaControle {
 				sql += "codigo_curso = " + disciplina.getCodigo_curso();
 				aux = 1;
 			}else {
-				sql += "AND " + "codigo_curso = " + disciplina.getCodigo_curso();
+				sql += " AND " + "codigo_curso = " + disciplina.getCodigo_curso();
 			}
 		}
 		if(disciplina.getCodigo_turma() != 0) {
@@ -96,19 +133,18 @@ public class DisciplinaControle {
 				sql += "codigo_turma = " + disciplina.getCodigo_turma();
 				aux = 1;
 			}else {
-				sql += "AND " + "codigo_turma = " + disciplina.getCodigo_turma();
+				sql += " AND " + "codigo_turma = " + disciplina.getCodigo_turma();
 			}
 		}
-		
 		dr.buscarDisciplina(sql);
 	}
-	
+
 	public void inserirDisciplina(Disciplina disciplina) {
 		String sql = "INSERT INTO disciplina(nome";
 		String auxSQL = "VALUES (";
 
 		auxSQL += "'" + disciplina.getNome() + "'";
-		
+
 		if(disciplina.getCodigo_curso() != 0) {
 			sql += ",codigo_curso";
 			auxSQL +=  ",'" + disciplina.getCodigo_curso() + "'" ;
@@ -130,22 +166,22 @@ public class DisciplinaControle {
 			auxSQL += ",'"+disciplina.getCodigo_turma()+"'";
 		}
 		sql += ")" + auxSQL + ")";
-		
+	
 		dr.inserirDisciplina(sql);
 	}
-	
-	public void inativarDisciplina(String disciplina) {
-		int codigo =  buscarCodigo(disciplina);
-		
-		String sql = "UPDATE disciplina SET ativo = 'N' WHERE codigo = " + codigo;
-		
+
+	public void inativarDisciplina(String disciplina, int codigo_curso) {
+		int codigo =  buscarCodigo(disciplina, codigo_curso,"");
+
+		String sql = "UPDATE disciplina SET ativo = 'N' WHERE codigo = " + codigo + "AND codigo_curso = " + codigo_curso;
+
 		dr.inativarDisciplina(sql);
 	}
-	
-	public void atualizarDisciplina(Disciplina novaDisciplina, String nomeDisicplina) {
+
+	public void atualizarDisciplina(Disciplina novaDisciplina, String nomeDisicplina, int codigo_curso) {
 		ArrayList <String> aux = new ArrayList <String> ();
-		int codigo = buscarCodigo(nomeDisicplina);
-		
+		int codigo = buscarCodigo(nomeDisicplina, codigo_curso,"");
+
 		if (novaDisciplina.getNome() != null && novaDisciplina.getNome() != "") {
 			String sql = "UPDATE disciplina SET nome = '" + novaDisciplina.getNome()  +"' WHERE codigo = " + codigo; 
 			aux.add(sql);
@@ -164,8 +200,8 @@ public class DisciplinaControle {
 			aux.add(sql);
 		}
 		dr.atualizarDisciplina(aux);
-	
+
 	}
-	
-	
+
+
 }

@@ -61,7 +61,7 @@ public class Oferta_DisciplinaControle {
 		}
 		
 		sql += ")" + auxSQL + ")";
-		
+	
 		
 		od.inserirOferta_Disciplina(sql);
 	}
