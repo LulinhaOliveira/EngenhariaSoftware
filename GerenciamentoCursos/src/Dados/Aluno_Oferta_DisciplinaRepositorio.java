@@ -3,6 +3,8 @@ package Dados;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Aluno_Oferta_Disciplina;
 
@@ -23,7 +25,12 @@ public class Aluno_Oferta_DisciplinaRepositorio {
 	}
 	
 	public void inserirAluno_Oferta(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Matricula Realizada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Fazer Matricula");
+		}
 	}
 	
 	public void buscarAluno_Disciplina(String sql) {

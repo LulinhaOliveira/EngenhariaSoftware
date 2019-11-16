@@ -200,6 +200,7 @@ public class TelaLogin extends JFrame {
 		contentPane.add(bAcessar);
 
 		JLabel lblSega = new JLabel("SEGA");
+		lblSega.setBackground(new Color(0, 0, 0));
 		lblSega.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		lblSega.setBounds(173, 11, 105, 49);
 		contentPane.add(lblSega);

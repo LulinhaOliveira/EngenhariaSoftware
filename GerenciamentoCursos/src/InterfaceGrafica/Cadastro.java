@@ -42,9 +42,15 @@ public class Cadastro extends JFrame {
 	private JTextField textField_6;
 	private JComboBox <String> comboBox = new JComboBox <String>();
 	private JComboBox <String> comboBox_1 = new JComboBox <String>();
+	private JComboBox<String> cmbCursos = new JComboBox <String>();
+	private JComboBox<String> cmbTurmas = new JComboBox <String>();
+	private JComboBox<String> cmbCoordenadores = new JComboBox <String>();
+	private JComboBox<String> cmbTurno = new JComboBox <String>();
 	JRadioButton rdbtnM = new JRadioButton("M");
 	JRadioButton rdbtnF = new JRadioButton("F");
 	public static Cadastro instance;
+
+	
 	public static Cadastro getInstace()  {
 		if (Cadastro.instance == null) {
 			return Cadastro.instance = new Cadastro();
@@ -61,6 +67,40 @@ public class Cadastro extends JFrame {
 		for(Disciplina d2 : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
 			comboBox.addItem(d2.getNome());
 		}
+	}
+	
+	public void preencherCMBCursos() {
+		@SuppressWarnings("unused")
+		Curso c;
+		Fachada.getInstace().getCcurso().buscarCurso(c = new Curso("","",""));
+
+		for(Curso a : Fachada.getInstace().getCcurso().getCp().getCursosLista()) {
+			cmbCursos.addItem(a.getNome());
+		}
+	}
+	public void preencherCMBTurmas() {
+		@SuppressWarnings("unused")
+		Turma t;
+		Fachada.getInstace().getTc().buscarTurma(t = new Turma("","","",""));
+
+		for(Turma a : Fachada.getInstace().getTc().getTp().getTurmalista()){
+			cmbTurmas.addItem(a.getNome());
+
+		}
+	}
+	
+	public void preencherCMBCoordenadores() {
+		Fachada.getInstace().buscarPerfil("coordenador",'W',0);
+
+		for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
+			cmbCoordenadores.addItem(u.getNome());
+		}
+	}
+	
+	public void preencherCMBTurno() {
+		cmbTurno.addItem("manha");
+		cmbTurno.addItem("tarde");
+		cmbTurno.addItem("noite");
 	}
 	
 	public void preencherCMBProfessores() {
@@ -143,14 +183,13 @@ public class Cadastro extends JFrame {
 			contentPane.add(textField_1);
 			textField_1.setColumns(10);
 
-			textField_2 = new JTextField();
-			textField_2.setBounds(10, 190, 130, 20);
-			contentPane.add(textField_2);
-			textField_2.setColumns(10);
+			cmbCoordenadores.setBounds(10, 190, 130, 20);
+			contentPane.add(cmbCoordenadores);
+			preencherCMBCoordenadores();
 
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Curso curso =  new Curso((String)textField.getText(),(String)textField_1.getText(),(String)textField_2.getText());
+					Curso curso =  new Curso((String)textField.getText(),(String)textField_1.getText(),Fachada.getInstace().getUc().buscarCodigo((String)cmbCoordenadores.getSelectedItem()));
 
 
 					try {
@@ -198,31 +237,33 @@ public class Cadastro extends JFrame {
 			textField_2.setBounds(10, 190, 130, 20);
 			contentPane.add(textField_2);
 			textField_2.setColumns(10);
+			
+			
+			cmbCursos.setBounds(254, 83, 164, 22);
+			contentPane.add(cmbCursos);
+			
+			
+			cmbTurmas.setBounds(254, 122, 164, 22);
+			contentPane.add(cmbTurmas);
 
-			textField_3 = new JTextField();
-			textField_3.setBounds(318, 87, 114, 20);
-			contentPane.add(textField_3);
-			textField_3.setColumns(10);
-
-			textField_4 = new JTextField();
-			textField_4.setBounds(318, 123, 114, 20);
-			contentPane.add(textField_4);
-			textField_4.setColumns(10);
-
+			preencherCMBCursos();
+			preencherCMBTurmas();
+			
 			if (TelaLogin.getInstace().getAdmCor() == 0) {
 				lblNewLabel_2.setEnabled(false);
-				textField_3.setEnabled(false);
+				cmbCursos.setEnabled(false);
+				
 			}				
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(TelaLogin.getInstace().getAdmCor() == 0) {
 						@SuppressWarnings("unused")
 						Disciplina d;
-						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',TelaLogin.getCurso_aluno_coord(),Integer.parseInt(textField_4.getText())));
+						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',TelaLogin.getCurso_aluno_coord(),Fachada.getInstace().getTc().buscarCodigo((String)cmbTurmas.getSelectedItem())));
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
 						@SuppressWarnings("unused")
 						Disciplina d;
-						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',Integer.parseInt(textField_3.getText()),Integer.parseInt(textField_4.getText())));
+						Fachada.getInstace().getDc().inserirDisciplina(d = new Disciplina(0,textField.getText(), textField_1.getText(), Integer.parseInt(textField_2.getText()),'S',Fachada.getInstace().getCcurso().buscarCodigo((String) cmbCursos.getSelectedItem()),Fachada.getInstace().getTc().buscarCodigo((String)cmbTurmas.getSelectedItem())));
 					}				
 				}
 			});
@@ -254,20 +295,20 @@ public class Cadastro extends JFrame {
 			contentPane.add(textField_1);
 			textField_1.setColumns(10);
 
-			textField_2 = new JTextField();
-			textField_2.setBounds(10, 190, 130, 20);
-			contentPane.add(textField_2);
-			textField_2.setColumns(10);
-
 			textField_3 = new JTextField();
 			textField_3.setBounds(318, 87, 114, 20);
 			contentPane.add(textField_3);
 			textField_3.setColumns(10);
+			
 
+			cmbTurno.setBounds(10, 196, 130, 22);
+			contentPane.add(cmbTurno);
+			preencherCMBTurno();
+			
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Turma turma = new Turma((String)textField.getText(),(String)textField_1.getText(),(String)textField_2.getText(), (String) textField_3.getText());;
-
+					Turma turma = new Turma((String)textField.getText(),(String)textField_1.getText(),(String)cmbTurno.getSelectedItem(), (String) textField_3.getText());;
+					
 					try {
 						Fachada.getInstace().getTc().inserirTurma(turma);
 					} catch (CampoVazioException e1) {
@@ -472,11 +513,6 @@ public class Cadastro extends JFrame {
 			textField_5.setColumns(10);	
 
 
-			textField_6 = new JTextField();
-			textField_6.setBounds(318, 191, 114, 20);
-			contentPane.add(textField_6);
-			textField_6.setColumns(10);
-
 			JRadioButton rdbtnM = new JRadioButton("M");
 			buttonGroup.add(rdbtnM);
 			rdbtnM.setBounds(10, 192, 42, 23);
@@ -486,10 +522,14 @@ public class Cadastro extends JFrame {
 			buttonGroup.add(rdbtnF);
 			rdbtnF.setBounds(70, 192, 42, 23);
 			contentPane.add(rdbtnF);
-
+			
+			cmbCursos.setBounds(268, 191, 164, 20);
+			contentPane.add(cmbCursos);
+			preencherCMBCursos();
+			
 			if (TelaLogin.getInstace().getAdmCor() == 0) {
 				lblCurso.setEnabled(false);
-				textField_6.setEnabled(false);
+				cmbCursos.setEnabled(false);
 			}				
 			btnCadastrar.addActionListener(new ActionListener() {
 				@SuppressWarnings("deprecation")
@@ -503,7 +543,7 @@ public class Cadastro extends JFrame {
 						Fachada.getInstace().matriculaPrimeiroPeriodo(TelaLogin.getCurso_aluno_coord(), textField.getText());
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
 						try {
-							Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(), Integer.parseInt(textField_6.getText()));
+							Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(),Fachada.getInstace().getCcurso().buscarCodigo((String) cmbCursos.getSelectedItem()) );
 						} catch (NumberFormatException e1) {
 							JOptionPane.showMessageDialog(null, e1.toString());
 						} catch (CampoVazioException e1) {

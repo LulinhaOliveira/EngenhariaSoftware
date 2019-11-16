@@ -3,14 +3,16 @@ package Dados;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Disciplina;
 
 public class DisciplinaRepositorio {
 	private ArrayList <Disciplina> disciplinaLista; 
 	Disciplina disciplina;
-	
-	
+
+
 	public DisciplinaRepositorio (){
 		disciplinaLista = new ArrayList <Disciplina>();
 	}
@@ -23,22 +25,42 @@ public class DisciplinaRepositorio {
 	}
 
 	//INSERIR DISCIPLINA
-		public void inserirDisciplina(String sql) {
-			Conexao.getInstance().executaSQL(sql);
+	public void inserirDisciplina(String sql) {
+
+		int  rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Disciplina Inserida Com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Disciplina");
 		}
-		//INATIVAR DISCIPLINA
-		public void inativarDisciplina(String sql) {
-			Conexao.getInstance().executaSQL(sql);
+	}
+
+	//INATIVAR DISCIPLINA
+	public void inativarDisciplina(String sql) {
+		int  rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Disciplina Inativada Com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inativar Disciplina");
 		}
-		//ATUALIZAR DADOS DA DISCIPLINA
-		public void atualizarDisciplina(ArrayList <String> array) {
-			for(String a : array) {
-				Conexao.getInstance().executaSQL(a);
-			}
+	}
+
+	//ATUALIZAR DADOS DA DISCIPLINA
+	public void atualizarDisciplina(ArrayList <String> array) {
+		int rowInsered = 0;
+		for(String a : array) {
+			rowInsered += Conexao.getInstance().executaSQL(a);
 		}
-		
+
+		if(rowInsered == 600) {
+			JOptionPane.showMessageDialog(null, "Atualização Realizada Com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro em Uma ou Mais Atualizações");
+		}
+	}
+
 	//BUSCAR DISCIPLINA
-		public void buscarDisciplina(String sql) {
+	public void buscarDisciplina(String sql) {
 
 		Conexao.getInstance().buscarSQL(sql);
 		disciplinaLista.clear();
@@ -57,10 +79,10 @@ public class DisciplinaRepositorio {
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			
+
 		}
 		Conexao.getInstance().setResultset(null);
-		}
-		
-		
+	}
+
+
 }

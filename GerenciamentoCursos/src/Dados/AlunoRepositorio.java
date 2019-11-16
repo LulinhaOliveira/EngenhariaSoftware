@@ -2,6 +2,9 @@ package Dados;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Aluno;
 
@@ -22,7 +25,12 @@ public class AlunoRepositorio {
 	}
 
 	public void inserirAluno(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Aluno Inserido com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Aluno");
+		}
 	}
 
 

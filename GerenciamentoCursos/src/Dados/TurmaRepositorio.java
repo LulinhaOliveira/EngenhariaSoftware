@@ -3,6 +3,8 @@ package Dados;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Turma;
 
@@ -24,15 +26,30 @@ public class TurmaRepositorio {
 	}
 
 	public void inserirTurma(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Turma Inserida com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Turma");
+		}
 	}
 	
 	public void atualizarTurma(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Turma Atualizada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro em Uma ou Mais Atualizações");
+		}
 	}
 	
 	public void inativarTurma(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Turma Inativada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inativar Turma");
+		}
 	}
 	
 	public void buscarTurma(String sql) {

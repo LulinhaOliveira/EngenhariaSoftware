@@ -192,7 +192,7 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario(Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem()));
 
 					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
 
@@ -203,7 +203,8 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+					
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario(Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem()));
 
 					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
 
@@ -214,7 +215,7 @@ public class Buscar extends JFrame {
 
 			btnBuscar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario((String) comboBox.getSelectedItem());
+					Fachada.getInstace().getUc().getUsuarioRepositorio().encontrarUsuario(Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem()));
 
 					textArea.setText(Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario().get(0).toString());
 

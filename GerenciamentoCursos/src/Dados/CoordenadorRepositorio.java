@@ -2,6 +2,9 @@ package Dados;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Coordenador;
 
@@ -22,7 +25,12 @@ public class CoordenadorRepositorio {
 	}
 
 	public void inserirCoordenador(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Coordenador Inserido com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Coordenador");
+		}
 	}
 
 	public void buscarCoordenador(String sql) {

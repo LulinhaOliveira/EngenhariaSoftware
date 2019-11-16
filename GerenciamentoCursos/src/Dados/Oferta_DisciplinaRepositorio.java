@@ -3,6 +3,8 @@ package Dados;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Oferta_Disciplina;
 
@@ -24,11 +26,21 @@ public class Oferta_DisciplinaRepositorio {
 	
 	
 	public void inserirOferta_Disciplina(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Oferta Realizada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Realizar Oferta");
+		}
 	}
 	
 	public void inativarOferta_Disciplina(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Oferta Inativada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inativar Oferta");
+		}
 	}
 	
 	public void disciplinasOfertadas(String sql) {
@@ -51,7 +63,12 @@ public class Oferta_DisciplinaRepositorio {
 	
 	
 	public void atualizarOferta_Disciplina(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Oferta Atualizada com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro em Uma ou Mais Atualizações");
+		}
 	}
 	
 }

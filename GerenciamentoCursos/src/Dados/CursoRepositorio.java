@@ -3,6 +3,8 @@ package Dados;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Curso;
 
@@ -25,15 +27,30 @@ public class CursoRepositorio {
 
 	//INSERIR CURSO
 	public void inserirCurso(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Curso Inserido com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Curso");
+		}
 	}
 	//INATIVAR CURSO
 	public void inativarCurso(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Curso Inativado com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inativar Curso");
+		}
 	}
 	//ATUALIZAR DADOS DO CURSO
 	public void atualizarCurso(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Curso Atualizado com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro em Uma ou Mais Atualizações");
+		}
 	}
 	
 	//BUSCAR CURSOS

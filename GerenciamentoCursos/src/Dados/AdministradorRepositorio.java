@@ -2,6 +2,9 @@ package Dados;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
+
 import BancoDados.Conexao;
 import Negocio.Entidades.Administrador;
 
@@ -24,7 +27,12 @@ public class AdministradorRepositorio {
 
 
 	public void inserirAdministrador(String sql) {
-		Conexao.getInstance().executaSQL(sql);
+		int rowInsered = Conexao.getInstance().executaSQL(sql);
+		if(rowInsered == 200) {
+			JOptionPane.showMessageDialog(null, "Administrador Inserido Com Sucesso");
+		}else {
+			JOptionPane.showMessageDialog(null, "Erro ao Inserir Administrador");
+		}
 	}
 
 	public void buscarAdministrador(String sql) {

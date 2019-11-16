@@ -67,7 +67,6 @@ public class Conexao {
 
 		}catch(Exception e) {
 
-			JOptionPane.showMessageDialog(null,e.getMessage());	
 			return 500; //return 500 = erro do sistema
 		}
 		return 200; //return 200 = sucesso

@@ -375,6 +375,7 @@ public class Fachada {
 		String sql = "SELECT usuario.* FROM usuario JOIN ";
 		Usuario usuario;
 		int aux = 0;
+		
 		if(type.equals("coordenador")) {
 			sql += "coordenador ON usuario.cpf = coordenador.cpf";
 		}else if(type.equals("professor")) {
@@ -482,10 +483,6 @@ public class Fachada {
 
 		uc.inserirUsuario(myList);
 		Aluno a = new Aluno(cpf,"CURDATE()",codigo_curso,cpf,'S');
-
-
-
-
 		alunoc.inserirAluno(a);
 
 	}

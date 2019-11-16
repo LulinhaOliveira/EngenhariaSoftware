@@ -82,6 +82,7 @@ public class Aluno_Oferta_DisciplinaControle {
 		String sql = "UPDATE aluno_oferta_disciplina SET media_final = ";
 		a.setMedia_final((a.getNota_1() + a.getNota_2()) / 2);
 		sql += a.getMedia_final();
+		sql += " WHERE cpf = " + a.getCpf() + " AND codigo = " + a.getCodigo();
 		aod.atualizarAluno_Disciplina(sql);
 	}
 	public void alterarStatus(Aluno_Oferta_Disciplina a) {
