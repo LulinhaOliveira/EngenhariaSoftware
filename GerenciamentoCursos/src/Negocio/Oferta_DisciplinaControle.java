@@ -68,37 +68,63 @@ public class Oferta_DisciplinaControle {
 
 	public void atualizarOferta_Disciplina(Oferta_Disciplina o , int codigo_Oferta) {
 		int aux = 0;
-		String sql = "";
-
+		String sql = "UPDATE oferta_disciplina SET ";
+		String auxSQL = " WHERE codigo = " + codigo_Oferta;
 
 		if (o.getDia_1()!= null && !(o.getDia_1().trim().equals(""))) {
-			sql += "UPDATE oferta_disciplina SET dia_1 = '" + o.getDia_1()  +"' WHERE codigo = " + codigo_Oferta + ";"; 
+			sql += " dia_1 = '" + o.getDia_1()  + "'"; 
 			aux = 1;
 		}
 		if(o.getDia_2() != null && !(o.getDia_2().trim().equals(""))) {
-			sql += "UPDATE oferta_disciplina SET dia_2 = '" + o.getDia_2()  +"' WHERE codigo = " + codigo_Oferta + ";"; 
-			aux = 1;
+			if(aux == 0) {
+				sql += " dia_2 = '" + o.getDia_2()  + "'"; 
+				aux = 1;
+			}else {
+				sql += " ,dia_2 = '" + o.getDia_2()  + "'"; 
+			}
+
 
 		}
 		if(o.getHora_1() != null && !o.getHora_1().trim().equals("")) {
-			sql += "UPDATE oferta_disciplina SET hora_1 = '" + o.getHora_1() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " hora_1 = '" + o.getHora_1()  + "'";
+				aux = 1;
+			}else {
+				sql += " ,hora_1 = '" + o.getHora_1() != 0 + "'";
+			}
+			
 		}
 		
 		if(o.getHora_2() !=  null && !o.getHora_2().trim().equals("")) {
-			sql += "UPDATE oferta_disciplina SET hora_2 = '" + o.getHora_2() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " hora_2 = '" + o.getHora_2() + "'";
+				aux = 1;
+			}else {
+				sql += " ,hora_2 = '" + o.getHora_2() + "'";
+			}
+			
 		}
 		
 		if(o.getCpf() != null && !(o.getCpf()).trim().equals("")){
-			sql += "UPDATE oferta_disciplina SET cpf = '" + o.getCpf() != 0 + "' WHERE codigo = " + codigo_Oferta + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " cpf = '" + o.getCpf() + "'";
+				aux = 1;	
+			}else {
+				sql += " ,cpf = '" + o.getCpf() + "'";
+			}
+			
 		}
 		if(o.getAtivo() == 'N') {
-			sql += "UPDATE oferta_disciplina SET ativo = 'S' WHERE codigo = " + codigo_Oferta + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " ativo = 'S'";
+				aux = 1;	
+			}else {
+				sql += " ,ativo = 'S'";
+			}
+			
 		}
 		
+		sql += auxSQL;
 		if(aux == 1) {
 			od.atualizarOferta_Disciplina(sql);
 		}
@@ -110,7 +136,7 @@ public class Oferta_DisciplinaControle {
 		od.inativarOferta_Disciplina(sql);
 	}
 
-	public void buscarOferta_Disciplina(Oferta_Disciplina o, int codigo_curso) {
+	public void buscarOferta_Disciplina(Oferta_Disciplina o) {
 		String sql = "SELECT * FROM oferta_disciplina";
 		String auxSQL = " WHERE ";
 		int aux = 0;

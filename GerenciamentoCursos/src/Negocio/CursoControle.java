@@ -120,22 +120,34 @@ public class CursoControle {
 	//CONTROLA A STRING DE UPTADE PARA CHAMAR O REPOSITORIO
 	public void atualizarCurso(Curso novoCurso, String nomeCurso) {
 		int aux = 0;
-		String sql = "";
+		String sql = "UPDATE curso SET ";
+		
 		int codigo = buscarCodigo(nomeCurso);
-
+		String auxSQL = " WHERE codigo = " + codigo;
+		
 		if (novoCurso.getNome() != null && !(novoCurso.getNome().trim().equals(""))) {
-			sql += "UPDATE curso SET nome = '" + novoCurso.getNome()  +"' WHERE codigo = " + codigo + ";"; 
+			sql += "nome = '" + novoCurso.getNome();
 			aux = 1;
 		}
 		if(novoCurso.getHorario_funcionamento() != null && !(novoCurso.getHorario_funcionamento().trim().equals(""))) {
-			sql += "UPDATE curso SET hora_funcionamento = '" + novoCurso.getHorario_funcionamento() +"' WHERE codigo = " + codigo + ";"; 
-			aux = 1;
+			if(aux == 0) {
+				sql += "hora_funcionamento = '" + novoCurso.getHorario_funcionamento();
+				aux = 1;
+			}else {
+				sql += ",hora_funcionamento = '" + novoCurso.getHorario_funcionamento();
+			}
 
 		}
 		if(novoCurso.getCpf_coordenador() != null && !(novoCurso.getCpf_coordenador().trim().equals(""))) {
-			sql += "UPDATE curso SET cpf_coordenador = '" + novoCurso.getCpf_coordenador() + "' WHERE codigo = " + codigo + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " cpf_coordenador = '" + novoCurso.getCpf_coordenador() + "'";
+				aux = 1;
+			}else {
+				sql += ",cpf_coordenador = '" + novoCurso.getCpf_coordenador() + "'";
+			}
+			
 		}
+		sql += auxSQL;
 		
 		if(aux == 1)
 		cp.atualizarCurso(sql);

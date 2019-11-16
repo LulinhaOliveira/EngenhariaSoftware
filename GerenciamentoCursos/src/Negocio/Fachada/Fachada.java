@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import BancoDados.Conexao;
 import Exception.CampoVazioException;
+import Exception.DiasSemanaException;
 import Exception.TurmaExisteAlunoException;
+import Exception.horaIndisponivelException;
 import Exception.qtdAlunoDisciplinaMaxException;
 import Negocio.AdministradorControle;
 import Negocio.AlunoControle;
@@ -300,8 +302,8 @@ public class Fachada {
 		Fachada.getInstace().getDc().getDr().getDisciplinaLista().clear();
 		int codigo = Fachada.getInstace().getDc().buscarCodigo(nomedisciplina, codigo_curso, cpf);;
 		String sql = "SELECT * FROM aluno_oferta_disciplina JOIN usuario ON aluno_oferta_disciplina.cpf = usuario.cpf WHERE aluno_oferta_disciplina.codigo = " + codigo + " AND aluno_oferta_disciplina.ativo = 'Cursando'" ;
-		
-		
+
+
 		Aluno_Oferta_Disciplina aluno_disciplina;
 		Usuario usuario;
 		aodc.getAod().getAluno_oferta_disciplinaLista().clear();
@@ -375,7 +377,7 @@ public class Fachada {
 		String sql = "SELECT usuario.* FROM usuario JOIN ";
 		Usuario usuario;
 		int aux = 0;
-		
+
 		if(type.equals("coordenador")) {
 			sql += "coordenador ON usuario.cpf = coordenador.cpf";
 		}else if(type.equals("professor")) {
@@ -447,27 +449,90 @@ public class Fachada {
 
 
 	}
-	public void cadastrarOferta(String nomeDisciplina, String nomeProfessor, String dia_1, String dia_2, String hora_1, String hora_2, int codigo_curso) {
+
+	public boolean verificarHora(String dia_1, String dia_2, String hora_1, String hora_2) {
+		int hora1 =  Integer.parseInt("" + hora_1.charAt(0) + hora_1.charAt(1));
+		int hora2 =  Integer.parseInt("" + hora_2.charAt(0) + hora_2.charAt(1));
+		boolean horaDisponivel = false;
+		for(Oferta_Disciplina o :odc.getOd().getOferta_disciplinalista()) {
+			if(o.getDia_1().equals(dia_1)) {
+				int ohora1 = Integer.parseInt("" + o.getHora_1().charAt(0) + o.getHora_1().charAt(1));
+				if(ohora1  + 2 <= hora1 || ohora1 - hora1 >= 2){
+					horaDisponivel = true;
+				}else {
+					return false;
+				}
+			}
+
+			if(o.getDia_2().equals(dia_2)) {
+				int ohora2 = Integer.parseInt("" + o.getHora_2().charAt(0) + o.getHora_2().charAt(1));
+				if(ohora2  + 2 <= hora2 || ohora2 - hora2 >= 2) {
+					horaDisponivel = true;
+				}else {
+					return false;
+				}		
+			}
+		}
+		return horaDisponivel;
+	}
+
+	public boolean verificarDias(String dia_1, String dia_2) {
+		if(dia_1.equals("segunda") || dia_1.equals("terça") || dia_1.equals("quarta") || dia_1.equals("quinta") || dia_1.equals("sexta")) {
+			if(dia_2.equals("segunda") || dia_2.equals("terça") || dia_2.equals("quarta") || dia_2.equals("quinta") || dia_2.equals("sexta")) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void cadastrarOferta(String nomeDisciplina, String nomeProfessor, String dia_1, String dia_2, String hora_1, String hora_2, int codigo_curso) throws horaIndisponivelException, DiasSemanaException {
 		Oferta_Disciplina o;
 
 		int cod = dc.buscarCodigo(nomeDisciplina, codigo_curso,"");
-
 		String cpf =  uc.buscarCodigo(nomeProfessor);
 
-		o = new Oferta_Disciplina(cod, dia_1, dia_2, hora_1, hora_2,'S',cpf); 
-
-		if(ofertaExiste(cod, codigo_curso) == true) {
-
-			odc.atualizarOferta_Disciplina(o, cod);
-		}else {
-
-			try {
-				odc.inserirOferta_Disciplina(o);
-			} catch (CampoVazioException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		String sql = "SELECT * FROM oferta_disciplina WHERE cpf = '" + cpf + "'";
+		Conexao.getInstance().buscarSQL(sql);
+		odc.getOd().getOferta_disciplinalista().clear();
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				o = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						Conexao.getInstance().getResultset().getString("cpf"));
+				odc.getOd().getOferta_disciplinalista().add(o);
 			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
+		Conexao.getInstance().setResultset(null);	
+
+		if(verificarDias(dia_1, dia_2) == true) {
+			if(verificarHora(dia_1, dia_2 , hora_1, hora_2) == true) {
+				o = new Oferta_Disciplina(cod, dia_1, dia_2, hora_1, hora_2,'S',cpf); 
+
+				if(ofertaExiste(cod, codigo_curso) == true) {
+
+					odc.atualizarOferta_Disciplina(o, cod);
+				}else {
+
+					try {
+						odc.inserirOferta_Disciplina(o);
+					} catch (CampoVazioException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+
+			}else {
+				throw new horaIndisponivelException();
+			}
+		}else {
+			throw new DiasSemanaException();
 		}
 
 	}
@@ -591,14 +656,58 @@ public class Fachada {
 
 		return qtd;
 	}
-
-	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException, qtdAlunoDisciplinaMaxException  {
+	
+	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException, qtdAlunoDisciplinaMaxException, horaIndisponivelException, DiasSemanaException  {
 		int codigo_turma;
-
+		Oferta_Disciplina o = null;
+		String sql = "SELECT oferta_disciplina.* FROM aluno_oferta_disciplina JOIN oferta_disciplina WHERE aluno_oferta_disciplina.cpf = '" + a.getCpf() + "'";
+		Conexao.getInstance().buscarSQL(sql);
+		
+		odc.getOd().getOferta_disciplinalista().clear();
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				o = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						Conexao.getInstance().getResultset().getString("cpf"));
+				odc.getOd().getOferta_disciplinalista().add(o);
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);		
+		
+		String sqlC = "SELECT * FROM oferta_disciplina WHERE codigo = " + a.getCodigo();
+		Conexao.getInstance().buscarSQL(sqlC);
+		
+		
+		try {
+			while(Conexao.getInstance().getResultset().next()) {
+				o = new Oferta_Disciplina(Integer.parseInt(Conexao.getInstance().getResultset().getString("codigo")), Conexao.getInstance().getResultset().getString("dia_1")
+						,Conexao.getInstance().getResultset().getString("dia_2"),Conexao.getInstance().getResultset().getString("hora_1"),Conexao.getInstance().getResultset().getString("hora_2"),Conexao.getInstance().getResultset().getString("ativo").charAt(0),
+						Conexao.getInstance().getResultset().getString("cpf"));
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		Conexao.getInstance().setResultset(null);
+		
 		if(qtdAluno_Disciplina(a.getCpf()) < 5) {
-			aodc.inserirAluno_Disciplina(a);
-			codigo_turma = aodc.pegarCodigoTurma(a.getCodigo());
-			atc.inserirAluno_Turma(a.getCpf(),codigo_turma);
+			if(verificarDias(o.getDia_1(), o.getDia_2()) == true) {
+				if(verificarHora(o.getDia_1(), o.getDia_2(), o.getHora_1(), o.getHora_2()) == true) {
+					aodc.inserirAluno_Disciplina(a);
+					codigo_turma = aodc.pegarCodigoTurma(a.getCodigo());
+					atc.inserirAluno_Turma(a.getCpf(),codigo_turma);
+				}else {
+						throw new horaIndisponivelException();
+					}
+				}else {
+					throw new DiasSemanaException();
+				}
+
 		}else {
 			throw new  qtdAlunoDisciplinaMaxException();
 		}

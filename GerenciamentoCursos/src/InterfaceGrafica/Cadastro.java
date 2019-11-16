@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Exception.CampoVazioException;
+import Exception.DiasSemanaException;
+import Exception.horaIndisponivelException;
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
 import Negocio.Entidades.Turma;
@@ -605,7 +607,15 @@ public class Cadastro extends JFrame {
 			btnCadastrar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 	
-					Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField_1.getText(), textField_2.getText(), textField.getText(), textField_3.getText(), TelaLogin.getCurso_aluno_coord());
+					try {
+						Fachada.getInstace().cadastrarOferta((String) comboBox.getSelectedItem(), (String) comboBox_1.getSelectedItem(), textField_1.getText(), textField_2.getText(), textField.getText(), textField_3.getText(), TelaLogin.getCurso_aluno_coord());
+					} catch (horaIndisponivelException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (DiasSemanaException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					}
 					
 					
 				}

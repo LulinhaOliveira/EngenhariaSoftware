@@ -143,28 +143,45 @@ public class TurmaControle {
 	public void atualizarTurma(Turma novaTurma, String nomeTurma) {
 
 		int aux = 0;
-		String sql = "";
+		String sql = "UPDATE turma SET ";
 		int codigo = buscarCodigo(nomeTurma);
-
+		String auxSQL = " WHERE codigo = " + codigo;
+		
 		if (novaTurma.getNome() != null && !(novaTurma.getNome().trim().equals(""))) {
-			sql += "UPDATE turma SET nome = '" + novaTurma.getNome()  +"' WHERE codigo = " + codigo + ";"; 
+			sql += "nome = '" + novaTurma.getNome()  + "'"; 
 			aux = 1;
 		}
 		if(novaTurma.getSigla() != null && !(novaTurma.getSigla().trim().equals(""))) {
-			sql += "UPDATE curso SET sigla = '" + novaTurma.getSigla() +"' WHERE codigo = " + codigo + ";"; 
-			aux = 1;
+			if(aux == 0) {
+				sql += " sigla = '" + novaTurma.getSigla() + "'"; 
+				aux = 1;
+			}else {
+				sql += " ,sigla = '" + novaTurma.getSigla() + "'"; 
+			}
+	
 
 		}
 		if(novaTurma.getTurno() != null && !(novaTurma.getTurno().trim().equals(""))) {
-			sql += "UPDATE curso SET turno = '" + novaTurma.getTurno() + "' WHERE codigo = " + codigo + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " turno = '" + novaTurma.getTurno() + "'";
+				aux = 1;
+			}else {
+				sql += " ,turno = '" + novaTurma.getTurno() + "'";
+			}
+
 		}
 		
 		if(novaTurma.getSemestre() != null && !(novaTurma.getSemestre().trim().equals(""))) {
-			sql += "UPDATE curso SET semestre = '" + novaTurma.getSemestre() + "' WHERE codigo = " + codigo + ";";
-			aux = 1;
+			if(aux == 0) {
+				sql += " semestre = '" + novaTurma.getSemestre() + "'";
+				aux = 1;
+			}else {
+				sql += " ,semestre = '" + novaTurma.getSemestre() + "'";
+			}
+			
 		}
 		
+		sql += auxSQL;
 		if(aux == 1) {
 			tp.atualizarTurma(sql);
 		}

@@ -52,7 +52,7 @@ public class DisciplinaRepositorio {
 			rowInsered += Conexao.getInstance().executaSQL(a);
 		}
 
-		if(rowInsered == 600) {
+		if(rowInsered == 200 || rowInsered == 400 || rowInsered == 600 || rowInsered == 800) {
 			JOptionPane.showMessageDialog(null, "Atualização Realizada Com Sucesso");
 		}else {
 			JOptionPane.showMessageDialog(null, "Erro em Uma ou Mais Atualizações");
