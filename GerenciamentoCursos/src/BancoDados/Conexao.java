@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import javax.swing.JOptionPane;
-
 public class Conexao {
 	public static Conexao instance;
 	private Connection connection = null;
@@ -54,7 +52,7 @@ public class Conexao {
 		try {
 			Conexao.getInstance().getStatement().executeUpdate(sql);
 		}catch(Exception e) {
-			System.out.println("Error" + e.getMessage());
+			
 			return 500; //erro interno do sistema
 		}
 		return 200; //sucess

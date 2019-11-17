@@ -492,7 +492,7 @@ public class Fachada {
 		int cod = dc.buscarCodigo(nomeDisciplina, codigo_curso,"");
 		String cpf =  uc.buscarCodigo(nomeProfessor);
 
-		String sql = "SELECT * FROM oferta_disciplina WHERE cpf = '" + cpf + "'";
+		String sql = "SELECT * FROM oferta_disciplina WHERE cpf = '" + cpf + "' AND oferta_disciplina.ativo = 'S'";
 		Conexao.getInstance().buscarSQL(sql);
 		odc.getOd().getOferta_disciplinalista().clear();
 		try {
@@ -660,7 +660,7 @@ public class Fachada {
 	public void matriculaAluno(Aluno_Oferta_Disciplina a) throws CampoVazioException, qtdAlunoDisciplinaMaxException, horaIndisponivelException, DiasSemanaException  {
 		int codigo_turma;
 		Oferta_Disciplina o = null;
-		String sql = "SELECT oferta_disciplina.* FROM aluno_oferta_disciplina JOIN oferta_disciplina WHERE aluno_oferta_disciplina.cpf = '" + a.getCpf() + "'";
+		String sql = "SELECT oferta_disciplina.* FROM aluno_oferta_disciplina JOIN oferta_disciplina WHERE aluno_oferta_disciplina.cpf = '" + a.getCpf() + "' AND aluno_oferta_disciplina.ativo = 'Cursando';";
 		Conexao.getInstance().buscarSQL(sql);
 		
 		odc.getOd().getOferta_disciplinalista().clear();
