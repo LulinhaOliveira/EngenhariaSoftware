@@ -5,8 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import BancoDados.Conexao;
+import Exception.CPFException;
 import Exception.CampoVazioException;
 import Exception.DiasSemanaException;
+import Exception.NomeNumeroException;
+import Exception.SenhaPequenaException;
 import Exception.TurmaExisteAlunoException;
 import Exception.horaIndisponivelException;
 import Exception.qtdAlunoDisciplinaMaxException;
@@ -537,7 +540,7 @@ public class Fachada {
 
 	}
 
-	public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) throws CampoVazioException {
+	public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) throws CampoVazioException, CPFException, NomeNumeroException, SenhaPequenaException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);
@@ -551,7 +554,7 @@ public class Fachada {
 		alunoc.inserirAluno(a);
 
 	}
-	public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) {
+	public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);
@@ -564,7 +567,7 @@ public class Fachada {
 
 		pc.inserirProfessor(cpf);
 	}
-	public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) {
+	public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);

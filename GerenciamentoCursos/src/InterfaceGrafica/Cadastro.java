@@ -6,8 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Exception.CPFException;
 import Exception.CampoVazioException;
 import Exception.DiasSemanaException;
+import Exception.NomeNumeroException;
+import Exception.SenhaPequenaException;
 import Exception.horaIndisponivelException;
 import Negocio.Entidades.Curso;
 import Negocio.Entidades.Disciplina;
@@ -383,7 +386,18 @@ public class Cadastro extends JFrame {
 			btnCadastrar.addActionListener(new ActionListener() {
 				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().cadastrarCoordenador(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+					try {
+						Fachada.getInstace().cadastrarCoordenador(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+					} catch (CPFException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (NomeNumeroException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (SenhaPequenaException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					}
 					
 				}
 			});
@@ -453,7 +467,18 @@ public class Cadastro extends JFrame {
 			btnCadastrar.addActionListener(new ActionListener() {
 				@SuppressWarnings("deprecation")
 				public void actionPerformed(ActionEvent e) {
-					Fachada.getInstace().cadastrarProfessor(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+					try {
+						Fachada.getInstace().cadastrarProfessor(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo());
+					} catch (CPFException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (NomeNumeroException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (SenhaPequenaException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					}
 
 				}
 			});
@@ -541,6 +566,15 @@ public class Cadastro extends JFrame {
 							Fachada.getInstace().cadastrarAluno(textField.getText(), textField_1.getText(), textField_3.getText(), textField_4.getText(), textField_5.getText(), definirSexo(),TelaLogin.getCurso_aluno_coord());
 						} catch (CampoVazioException e1) {
 							JOptionPane.showMessageDialog(null, e1.toString("Nenhum Campo Pode Ser"));
+						} catch (CPFException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (NomeNumeroException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (SenhaPequenaException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
 						}
 						Fachada.getInstace().matriculaPrimeiroPeriodo(TelaLogin.getCurso_aluno_coord(), textField.getText());
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
@@ -550,6 +584,15 @@ public class Cadastro extends JFrame {
 							JOptionPane.showMessageDialog(null, e1.toString());
 						} catch (CampoVazioException e1) {
 							JOptionPane.showMessageDialog(null, e1.toString("Nenhum Campo Pode Ser"));
+						} catch (CPFException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (NomeNumeroException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (SenhaPequenaException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
 						}
 						Fachada.getInstace().matriculaPrimeiroPeriodo(Integer.parseInt(textField_6.getText()), textField.getText());
 					}	
