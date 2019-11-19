@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import Exception.CPFException;
 import Exception.CampoVazioException;
 import Exception.DiasSemanaException;
+import Exception.EmailInvalidoException;
 import Exception.NomeNumeroException;
 import Exception.SenhaPequenaException;
 import Exception.horaIndisponivelException;
@@ -397,6 +398,9 @@ public class Cadastro extends JFrame {
 					} catch (SenhaPequenaException e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (EmailInvalidoException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
 					}
 					
 				}
@@ -476,6 +480,9 @@ public class Cadastro extends JFrame {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null, e1.toString());
 					} catch (SenhaPequenaException e1) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, e1.toString());
+					} catch (EmailInvalidoException e1) {
 						// TODO Auto-generated catch block
 						JOptionPane.showMessageDialog(null, e1.toString());
 					}
@@ -575,6 +582,9 @@ public class Cadastro extends JFrame {
 						} catch (SenhaPequenaException e1) {
 							// TODO Auto-generated catch block
 							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (EmailInvalidoException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
 						}
 						Fachada.getInstace().matriculaPrimeiroPeriodo(TelaLogin.getCurso_aluno_coord(), textField.getText());
 					}else if (TelaLogin.getInstace().getAdmCor() == 1) {
@@ -591,6 +601,9 @@ public class Cadastro extends JFrame {
 							// TODO Auto-generated catch block
 							JOptionPane.showMessageDialog(null, e1.toString());
 						} catch (SenhaPequenaException e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null, e1.toString());
+						} catch (EmailInvalidoException e1) {
 							// TODO Auto-generated catch block
 							JOptionPane.showMessageDialog(null, e1.toString());
 						}

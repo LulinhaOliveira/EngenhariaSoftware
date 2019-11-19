@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 
 import Dados.UsuarioRepositorio;
 import Exception.CPFException;
+import Exception.EmailInvalidoException;
 import Exception.NomeNumeroException;
 import Exception.SenhaErradaException;
 import Exception.SenhaPequenaException;
@@ -95,6 +96,13 @@ public class UsuarioControle {
 		}
 	}
 	
+	public boolean validarEmail(String email) {
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
+        java.util.regex.Matcher m = p.matcher(email);
+        return m.matches();
+ }
+	
 	public String buscarCodigo(String nome) {
 
 		up.encontrarTodosUsuarios();
@@ -107,37 +115,41 @@ public class UsuarioControle {
 
 		return "";
 	}
-	public void inserirUsuario(ArrayList<Object> data) throws CPFException, NomeNumeroException, SenhaPequenaException {
+	public void inserirUsuario(ArrayList<Object> data) throws CPFException, NomeNumeroException, SenhaPequenaException, EmailInvalidoException {
 		if(validarCPF((String)data.get(0)) == true) {
 			if(validarNome((String)data.get(1)) == true) {
 				if(validarSenha((String)data.get(5)) == true) {
-					try {
-						//recebe o ultimo campo do arrayList
-							Object o = data.get(data.size() - 1);
+					if(validarEmail((String)data.get(4)) == true) {
+						try {
+							//recebe o ultimo campo do arrayList
+								Object o = data.get(data.size() - 1);
 
-							String sql = "INSERT INTO usuario(cpf, nome, sexo, telefone, email, senha) VALUES (";
-							for (Object obj: data) {
-								if (obj == null) {
-									JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
-								} else if(o != obj) {
-									if (obj instanceof Character) {
-										//tipo char concatena com aspas simples
-										sql += "\'" + obj + "\', "; 
-									} else {
-										sql += "\"" + obj + "\", "; 
+								String sql = "INSERT INTO usuario(cpf, nome, sexo, telefone, email, senha) VALUES (";
+								for (Object obj: data) {
+									if (obj == null) {
+										JOptionPane.showMessageDialog(null, "Parametros incompletos", "Erro", JOptionPane.ERROR_MESSAGE);
+									} else if(o != obj) {
+										if (obj instanceof Character) {
+											//tipo char concatena com aspas simples
+											sql += "\'" + obj + "\', "; 
+										} else {
+											sql += "\"" + obj + "\", "; 
+										}
+									} else if (o == obj) {
+										//caso entre aqui, sera o ultimo dado do arraylist, entao nao precisa concatenar a ','
+										sql += "\"" + obj +"\"";	
 									}
-								} else if (o == obj) {
-									//caso entre aqui, sera o ultimo dado do arraylist, entao nao precisa concatenar a ','
-									sql += "\"" + obj +"\"";	
 								}
-							}
-							sql += ");";
-							up.inserirUsuario(sql);
-						} catch (Exception e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-								
+								sql += ");";
+								up.inserirUsuario(sql);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}			
+						
+					}else {
+						throw new EmailInvalidoException();
+					}			
 				}else {
 					throw new SenhaPequenaException();
 				}

@@ -8,6 +8,7 @@ import BancoDados.Conexao;
 import Exception.CPFException;
 import Exception.CampoVazioException;
 import Exception.DiasSemanaException;
+import Exception.EmailInvalidoException;
 import Exception.NomeNumeroException;
 import Exception.SenhaPequenaException;
 import Exception.TurmaExisteAlunoException;
@@ -540,7 +541,7 @@ public class Fachada {
 
 	}
 
-	public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) throws CampoVazioException, CPFException, NomeNumeroException, SenhaPequenaException {
+	public void cadastrarAluno(String cpf, String nome, String telefone, String email, String password, char sexo, int codigo_curso) throws CampoVazioException, CPFException, NomeNumeroException, SenhaPequenaException, EmailInvalidoException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);
@@ -554,7 +555,7 @@ public class Fachada {
 		alunoc.inserirAluno(a);
 
 	}
-	public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException {
+	public void cadastrarProfessor(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException, EmailInvalidoException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);
@@ -567,7 +568,7 @@ public class Fachada {
 
 		pc.inserirProfessor(cpf);
 	}
-	public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException {
+	public void cadastrarCoordenador(String cpf, String nome, String telefone, String email, String password, char sexo) throws CPFException, NomeNumeroException, SenhaPequenaException, EmailInvalidoException {
 		ArrayList<Object> myList = new ArrayList<Object>();
 		myList.add(cpf);
 		myList.add(nome);
