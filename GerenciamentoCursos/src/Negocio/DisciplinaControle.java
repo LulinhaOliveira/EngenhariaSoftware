@@ -78,14 +78,14 @@ public class DisciplinaControle {
 		if(disciplina.getCodigo() != 0) {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "codigo = " + disciplina.getCodigo();
+				sql += " codigo = " + disciplina.getCodigo();
 				aux = 1;
 			}
 		}
 		if(disciplina.getNome() != null && disciplina.getNome() != "") {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "nome = '" + disciplina.getNome() + "'";
+				sql += " nome = '" + disciplina.getNome() + "'";
 				aux = 1;
 			}else {
 				sql += " AND " + " nome = '" + disciplina.getNome() + "'";
@@ -94,7 +94,7 @@ public class DisciplinaControle {
 		if(disciplina.getEmenta() != null && disciplina.getEmenta() != "") {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "ementa = '" + disciplina.getEmenta() + "'";
+				sql += " ementa = '" + disciplina.getEmenta() + "'";
 				aux = 1;
 			}else {
 				sql += " AND " + "ementa = '" + disciplina.getEmenta() + "'";
@@ -103,7 +103,7 @@ public class DisciplinaControle {
 		if(disciplina.getNumero_creditos() != 0) {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "num_creditos = '" + disciplina.getNumero_creditos() + "'";
+				sql += " num_creditos = '" + disciplina.getNumero_creditos() + "'";
 				aux = 1;
 			}else {
 				sql += " AND " + "num_creditos = '" + disciplina.getNumero_creditos() + "'";
@@ -112,10 +112,10 @@ public class DisciplinaControle {
 		if(disciplina.getAtivo() == 'N' || disciplina.getAtivo() == 'S') {
 			if(aux == 0) {
 				sql += auxSQL;
-				sql += "ativo = '" + disciplina.getAtivo() + "'";
+				sql += " ativo = '" + disciplina.getAtivo() + "'";
 				aux = 1;
 			}else {
-				sql += " AND " + "ativo = '" + disciplina.getAtivo() + "'";
+				sql += " AND " + " ativo = '" + disciplina.getAtivo() + "'";
 			}
 		}
 		if(disciplina.getCodigo_curso() != 0) {

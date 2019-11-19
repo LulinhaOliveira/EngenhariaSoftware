@@ -274,11 +274,12 @@ public class Fachada {
 		}
 		if(codigo != 0) {
 			if(aux == 0) {
-				sql += "WHERE disciplina.codigo_curso = " + codigo;
+				sql += " WHERE disciplina.codigo_curso = " + codigo;
 			}else {
-				sql += "AND disciplina.codigo_curso = " + codigo; 
+				sql += " AND disciplina.codigo_curso = " + codigo; 
 			}
 		}
+		
 		Disciplina disciplina;
 		Conexao.getInstance().buscarSQL(sql);
 		try {
@@ -458,26 +459,37 @@ public class Fachada {
 		int hora1 =  Integer.parseInt("" + hora_1.charAt(0) + hora_1.charAt(1));
 		int hora2 =  Integer.parseInt("" + hora_2.charAt(0) + hora_2.charAt(1));
 		boolean horaDisponivel = false;
-		for(Oferta_Disciplina o :odc.getOd().getOferta_disciplinalista()) {
-			if(o.getDia_1().equals(dia_1)) {
-				int ohora1 = Integer.parseInt("" + o.getHora_1().charAt(0) + o.getHora_1().charAt(1));
-				if(ohora1  + 2 <= hora1 || ohora1 - hora1 >= 2){
-					horaDisponivel = true;
-				}else {
-					return false;
+		
+		
+		if(odc.getOd().getOferta_disciplinalista().size() != 0) {
+			for(Oferta_Disciplina o :odc.getOd().getOferta_disciplinalista()) {
+	
+				if(o.getDia_1().equals(dia_1)) {
+					int ohora1 = Integer.parseInt("" + o.getHora_1().charAt(0) + o.getHora_1().charAt(1));
+					
+					if(ohora1  + 2 <= hora1 || ohora1 - hora1 >= 2){
+						horaDisponivel = true;
+					}else {
+						return false;
+					}
+				}
+
+				if(o.getDia_2().equals(dia_2)) {
+					int ohora2 = Integer.parseInt("" + o.getHora_2().charAt(0) + o.getHora_2().charAt(1));
+					System.out.println(hora2 + " " + ohora2 );
+					if(ohora2  + 2 <= hora2 || ohora2 - hora2 >= 2) {
+						horaDisponivel = true;
+					}else {
+						return false;
+					}		
 				}
 			}
-
-			if(o.getDia_2().equals(dia_2)) {
-				int ohora2 = Integer.parseInt("" + o.getHora_2().charAt(0) + o.getHora_2().charAt(1));
-				if(ohora2  + 2 <= hora2 || ohora2 - hora2 >= 2) {
-					horaDisponivel = true;
-				}else {
-					return false;
-				}		
-			}
+			System.out.println(hora1 + " " + hora2 );
+			return horaDisponivel;
+		}else {
+			horaDisponivel = true;
+			return horaDisponivel;
 		}
-		return horaDisponivel;
 	}
 
 	public boolean verificarDias(String dia_1, String dia_2) {

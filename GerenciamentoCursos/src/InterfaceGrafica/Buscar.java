@@ -98,7 +98,7 @@ public class Buscar extends JFrame {
 					comboBox.addItem(u.getNome());
 				}			}
 		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
-
+			
 			Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'N');
 
 			for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {

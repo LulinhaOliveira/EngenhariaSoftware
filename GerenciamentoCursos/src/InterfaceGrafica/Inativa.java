@@ -37,6 +37,7 @@ public class Inativa extends JFrame {
 	}
 
 	public void preencheCMB() {
+		comboBox.removeAllItems();
 		if(GerenciamentoDeCursos.getInstace().isVisible() == true) {
 			@SuppressWarnings("unused")
 			Curso c;
@@ -95,17 +96,17 @@ public class Inativa extends JFrame {
 			}else if (TelaLogin.getInstace().getAdmCor() == 1) {
 				Fachada.getInstace().buscarPerfil("aluno",'S',0);
 
-
 				for(Usuario u : Fachada.getInstace().getUc().getUsuarioRepositorio().getListaUsuario()) {
 					comboBox.addItem(u.getNome());
 				}			
-			}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
-				Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'S');
+			}
 
-				for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
-					comboBox.addItem(d.getNome());
-				}
+		}else if (GerenciamentoOfertas.getInstace().isVisible() == true) {
+			
+			Fachada.getInstace().disciplinasOfertadas("", TelaLogin.getCurso_aluno_coord(),'S');
 
+			for(Disciplina d : Fachada.getInstace().getDc().getDr().getDisciplinaLista()) {
+				comboBox.addItem(d.getNome());
 			}
 		}
 
@@ -157,7 +158,9 @@ public class Inativa extends JFrame {
 		btnVer.setBounds(173, 85, 89, 23);
 		contentPane.add(btnVer);
 
+
 		preencheCMB();
+
 		if(GerenciamentoDeCursos.getInstace().isVisible() == true) {
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -221,7 +224,7 @@ public class Inativa extends JFrame {
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
-					
+
 					Fachada.getInstace().getUc().desativarUsuario(cpf);
 				}
 			});
@@ -239,7 +242,7 @@ public class Inativa extends JFrame {
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
-					
+
 					Fachada.getInstace().getUc().desativarUsuario(cpf);
 				}
 			});
@@ -257,7 +260,7 @@ public class Inativa extends JFrame {
 			btnInativar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					String  cpf =Fachada.getInstace().getUc().buscarCodigo((String) comboBox.getSelectedItem());
-					
+
 					Fachada.getInstace().getUc().desativarUsuario(cpf);
 				}
 			});

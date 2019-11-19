@@ -55,7 +55,7 @@ public class CursoControle {
 			throw new CampoVazioException();
 		}
 
-
+		
 		
 	}
 	//CONTROLA A STRING DE SELECT PARA CHAMAR O REPOSITORIO
@@ -126,15 +126,15 @@ public class CursoControle {
 		String auxSQL = " WHERE codigo = " + codigo;
 		
 		if (novoCurso.getNome() != null && !(novoCurso.getNome().trim().equals(""))) {
-			sql += "nome = '" + novoCurso.getNome();
+			sql += "nome = '" + novoCurso.getNome() + "'";
 			aux = 1;
 		}
 		if(novoCurso.getHorario_funcionamento() != null && !(novoCurso.getHorario_funcionamento().trim().equals(""))) {
 			if(aux == 0) {
-				sql += "hora_funcionamento = '" + novoCurso.getHorario_funcionamento();
+				sql += "hora_funcionamento = '" + novoCurso.getHorario_funcionamento() + "'";
 				aux = 1;
 			}else {
-				sql += ",hora_funcionamento = '" + novoCurso.getHorario_funcionamento();
+				sql += ",hora_funcionamento = '" + novoCurso.getHorario_funcionamento() + "'";
 			}
 
 		}
@@ -148,7 +148,7 @@ public class CursoControle {
 			
 		}
 		sql += auxSQL;
-		
+		System.out.println(sql);
 		if(aux == 1)
 		cp.atualizarCurso(sql);
 
